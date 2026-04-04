@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { setSessionCookieOnResponse } from "@/lib/auth";
+import { jsonWithSessionCookie } from "@/lib/auth";
 import { createServiceClient, isSupabaseConfigured } from "@/lib/db";
 import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { sanitizeString } from "@/lib/sanitize";
@@ -67,8 +67,14 @@ export async function POST(request: Request) {
     .single();
 
   if (error || !user) {
-    console.error(error);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    console.error("[auth/register] insert:", error);
+    return NextResponse.json(
+      {
+        error: error?.message ?? "Database error",
+        code: "DATABASE_ERROR",
+      },
+      { status: 503 }
+    );
   }
 
   await supabase.from("financial_profiles").insert({
@@ -81,9 +87,11 @@ export async function POST(request: Request) {
     has_children: false,
   });
 
-  const res = NextResponse.json({
-    success: true,
-    user: { id: user.id, name: user.name, email: user.email },
-  });
-  return setSessionCookieOnResponse(res, user.id);
+  return jsonWithSessionCookie(
+    {
+      success: true,
+      user: { id: user.id, name: user.name, email: user.email },
+    },
+    user.id
+  );
 }

@@ -82,10 +82,13 @@ export function RegisterForm() {
         }),
       });
       const data = await res.json().catch(() => ({}));
+      const payload = data as { code?: string };
       if (!res.ok) {
         if (res.status === 429) setError(t("rateLimited"));
         else if (res.status === 409) setError(t("emailTaken"));
-        else if (res.status === 503 || (data as { code?: string }).code === "SERVICE_UNAVAILABLE") {
+        else if (payload.code === "AUTH_MISCONFIGURED") setError(t("authSecretMissing"));
+        else if (payload.code === "DATABASE_ERROR") setError(t("registerDbError"));
+        else if (res.status === 503 || payload.code === "SERVICE_UNAVAILABLE") {
           setError(t("serviceUnavailable"));
         } else setError(t("genericError"));
         return;

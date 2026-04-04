@@ -17,12 +17,25 @@ const PROTECTED_ROUTES = [
 ];
 const AUTH_ROUTES = ["/login", "/register", "/forgot-password"];
 
+/** next-intl may use /en/... internally; `startsWith("/dashboard")` fails for "/en/dashboard". */
+function withoutLocalePrefix(pathname: string): string {
+  for (const loc of routing.locales) {
+    const prefix = `/${loc}`;
+    if (pathname === prefix) return "/";
+    if (pathname.startsWith(`${prefix}/`)) {
+      return pathname.slice(prefix.length) || "/";
+    }
+  }
+  return pathname;
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const path = withoutLocalePrefix(pathname);
   const session = request.cookies.get("session");
 
-  const isProtected = PROTECTED_ROUTES.some((r) => pathname.startsWith(r));
-  const isAuth = AUTH_ROUTES.some((r) => pathname.startsWith(r));
+  const isProtected = PROTECTED_ROUTES.some((r) => path.startsWith(r));
+  const isAuth = AUTH_ROUTES.some((r) => path.startsWith(r));
 
   if (isProtected) {
     if (!session?.value) {

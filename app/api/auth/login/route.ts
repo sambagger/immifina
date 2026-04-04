@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { setSessionCookieOnResponse } from "@/lib/auth";
+import { jsonWithSessionCookie } from "@/lib/auth";
 import { createServiceClient, isSupabaseConfigured } from "@/lib/db";
 import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { sanitizeString } from "@/lib/sanitize";
@@ -36,16 +36,33 @@ export async function POST(request: Request) {
   const password = parsed.data.password;
 
   const supabase = createServiceClient();
-  const { data: user } = await supabase
+  const { data: user, error: queryError } = await supabase
     .from("users")
     .select("id, password_hash")
     .eq("email", email)
     .maybeSingle();
 
-  if (!user || !bcrypt.compareSync(password, user.password_hash)) {
-    return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
+  if (queryError) {
+    console.error("[auth/login] supabase:", queryError.message);
+    return NextResponse.json(
+      { error: "Database error", code: "DATABASE_ERROR" },
+      { status: 503 }
+    );
   }
 
-  const res = NextResponse.json({ success: true });
-  return setSessionCookieOnResponse(res, user.id);
+  if (!user) {
+    return NextResponse.json(
+      { error: "Invalid email or password", code: "INVALID_CREDENTIALS" },
+      { status: 401 }
+    );
+  }
+
+  if (!bcrypt.compareSync(password, user.password_hash)) {
+    return NextResponse.json(
+      { error: "Invalid email or password", code: "INVALID_CREDENTIALS" },
+      { status: 401 }
+    );
+  }
+
+  return jsonWithSessionCookie({ success: true }, user.id);
 }

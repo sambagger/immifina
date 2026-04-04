@@ -22,11 +22,13 @@ export function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [showWrongPasswordHint, setShowWrongPasswordHint] = useState(false);
   const [loading, setLoading] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setShowWrongPasswordHint(false);
     const parsed = ClientLoginSchema.safeParse({ email, password });
     if (!parsed.success) {
       setError(t("invalidCredentials"));
@@ -40,11 +42,27 @@ export function LoginForm() {
         body: JSON.stringify(parsed.data),
         credentials: "include",
       });
-      const data = await res.json().catch(() => ({}));
+      const data = (await res.json().catch(() => ({}))) as {
+        code?: string;
+        success?: boolean;
+      };
       if (!res.ok) {
         if (res.status === 429) setError(t("rateLimited"));
-        else if (res.status === 503 || (data as { code?: string }).code === "SERVICE_UNAVAILABLE") {
-          setError(t("serviceUnavailable"));
+        else if (data.code === "AUTH_MISCONFIGURED") {
+          setError(t("authSecretMissing"));
+        } else if (
+          res.status === 503 ||
+          data.code === "SERVICE_UNAVAILABLE" ||
+          data.code === "DATABASE_ERROR"
+        ) {
+          setError(
+            data.code === "DATABASE_ERROR" ? t("authDbError") : t("serviceUnavailable")
+          );
+        } else if (res.status === 401 && data.code === "INVALID_CREDENTIALS") {
+          setError(t("invalidCredentials"));
+          setShowWrongPasswordHint(true);
+        } else if (res.status >= 500) {
+          setError(t("genericError"));
         } else setError(t("invalidCredentials"));
         return;
       }
@@ -93,9 +111,12 @@ export function LoginForm() {
           />
         </div>
         {error ? (
-          <p id="login-error" className="text-sm text-red" role="alert">
-            {error}
-          </p>
+          <div id="login-error" role="alert" className="space-y-2">
+            <p className="text-sm text-red">{error}</p>
+            {showWrongPasswordHint ? (
+              <p className="text-xs text-muted">{t("invalidCredentialsHint")}</p>
+            ) : null}
+          </div>
         ) : null}
         <Button type="submit" className="w-full" disabled={loading}>
           {loading ? "…" : t("submitLogin")}

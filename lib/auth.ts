@@ -33,6 +33,30 @@ export async function setSessionCookieOnResponse(response: NextResponse, userId:
   return response;
 }
 
+/**
+ * Build a JSON response with a session cookie. Catches missing AUTH_SECRET in
+ * production so the route returns 503 JSON instead of an uncaught 500.
+ */
+export async function jsonWithSessionCookie(
+  body: Record<string, unknown>,
+  userId: string,
+  init?: { status?: number }
+) {
+  try {
+    const res = NextResponse.json(body, { status: init?.status ?? 200 });
+    return await setSessionCookieOnResponse(res, userId);
+  } catch (err) {
+    console.error("[auth] session signing failed:", err);
+    return NextResponse.json(
+      {
+        error: "AUTH_SECRET is missing or invalid in production",
+        code: "AUTH_MISCONFIGURED",
+      },
+      { status: 503 }
+    );
+  }
+}
+
 export function clearSessionCookieOnResponse(response: NextResponse) {
   response.cookies.set(SESSION_COOKIE, "", {
     ...getSessionCookieOptions(),
