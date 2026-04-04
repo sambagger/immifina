@@ -1,17 +1,10 @@
 import createIntlMiddleware from "next-intl/middleware";
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
+import { getAuthSecretBytes } from "./lib/auth-secret";
 import { routing } from "./i18n/routing";
 
 const intlMiddleware = createIntlMiddleware(routing);
-
-function getSecretKey() {
-  const secret = process.env.AUTH_SECRET;
-  if (!secret) {
-    return new TextEncoder().encode("dev-only-change-me-in-env");
-  }
-  return new TextEncoder().encode(secret);
-}
 
 const PROTECTED_ROUTES = [
   "/dashboard",
@@ -35,16 +28,28 @@ export async function middleware(request: NextRequest) {
     if (!session?.value) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
+    let secretKey: Uint8Array;
     try {
-      await jwtVerify(session.value, getSecretKey());
+      secretKey = getAuthSecretBytes();
+    } catch {
+      return new NextResponse("Server misconfiguration: AUTH_SECRET", { status: 500 });
+    }
+    try {
+      await jwtVerify(session.value, secretKey);
     } catch {
       return NextResponse.redirect(new URL("/login", request.url));
     }
   }
 
   if (isAuth && session?.value) {
+    let secretKey: Uint8Array;
     try {
-      await jwtVerify(session.value, getSecretKey());
+      secretKey = getAuthSecretBytes();
+    } catch {
+      return new NextResponse("Server misconfiguration: AUTH_SECRET", { status: 500 });
+    }
+    try {
+      await jwtVerify(session.value, secretKey);
       return NextResponse.redirect(new URL("/dashboard", request.url));
     } catch {
       /* invalid session — allow auth pages */

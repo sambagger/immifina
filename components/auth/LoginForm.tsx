@@ -38,11 +38,14 @@ export function LoginForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(parsed.data),
+        credentials: "include",
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         if (res.status === 429) setError(t("rateLimited"));
-        else setError(t("invalidCredentials"));
+        else if (res.status === 503 || (data as { code?: string }).code === "SERVICE_UNAVAILABLE") {
+          setError(t("serviceUnavailable"));
+        } else setError(t("invalidCredentials"));
         return;
       }
       if (data.success) router.push("/dashboard");

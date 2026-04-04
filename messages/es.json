@@ -85,6 +85,7 @@
     "submitLogin": "Iniciar sesión",
     "submitRegister": "Crear cuenta",
     "invalidCredentials": "Correo o contraseña no válidos",
+    "serviceUnavailable": "La app no puede conectar con la base de datos. En producción, añada NEXT_PUBLIC_SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY en Vercel → Ajustes → Variables de entorno, vuelva a desplegar y aplique el esquema SQL en Supabase.",
     "genericError": "No pudimos completar la solicitud. Intente de nuevo.",
     "rateLimited": "Demasiados intentos. Espere e intente de nuevo.",
     "emailTaken": "Ya existe una cuenta con este correo.",

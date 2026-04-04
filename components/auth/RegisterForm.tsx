@@ -73,6 +73,7 @@ export function RegisterForm() {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
           email: parsed.data.email,
           password: parsed.data.password,
@@ -84,7 +85,9 @@ export function RegisterForm() {
       if (!res.ok) {
         if (res.status === 429) setError(t("rateLimited"));
         else if (res.status === 409) setError(t("emailTaken"));
-        else setError(t("genericError"));
+        else if (res.status === 503 || (data as { code?: string }).code === "SERVICE_UNAVAILABLE") {
+          setError(t("serviceUnavailable"));
+        } else setError(t("genericError"));
         return;
       }
       if (data.success) router.push("/dashboard");

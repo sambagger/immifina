@@ -85,6 +85,7 @@
     "submitLogin": "Log in",
     "submitRegister": "Create account",
     "invalidCredentials": "Invalid email or password",
+    "serviceUnavailable": "The app can't reach the database. In production, add NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in Vercel → Settings → Environment Variables, redeploy, and ensure your Supabase SQL schema is applied.",
     "genericError": "We couldn't complete that request. Try again.",
     "rateLimited": "Too many attempts. Please wait and try again.",
     "emailTaken": "An account with this email already exists.",

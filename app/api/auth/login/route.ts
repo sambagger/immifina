@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { createSession } from "@/lib/auth";
+import { setSessionCookieOnResponse } from "@/lib/auth";
 import { createServiceClient, isSupabaseConfigured } from "@/lib/db";
 import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { sanitizeString } from "@/lib/sanitize";
@@ -14,7 +14,10 @@ export async function POST(request: Request) {
   }
 
   if (!isSupabaseConfigured()) {
-    return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
+    return NextResponse.json(
+      { error: "Service unavailable", code: "SERVICE_UNAVAILABLE" },
+      { status: 503 }
+    );
   }
 
   let body: unknown;
@@ -43,7 +46,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
   }
 
-  await createSession(user.id);
-
-  return NextResponse.json({ success: true });
+  const res = NextResponse.json({ success: true });
+  return setSessionCookieOnResponse(res, user.id);
 }
