@@ -1,10 +1,14 @@
-import DOMPurify from "isomorphic-dompurify";
-
+/**
+ * Plain-text sanitization for API inputs (names, emails, snippets).
+ * We intentionally avoid isomorphic-dompurify + JSDOM — that chain triggers
+ * ERR_REQUIRE_ESM (@exodus/bytes / html-encoding-sniffer) on Vercel serverless.
+ */
 export function sanitizeString(input: string): string {
-  return DOMPurify.sanitize(input.trim(), {
-    ALLOWED_TAGS: [],
-    ALLOWED_ATTR: [],
-  });
+  let s = input.trim().replace(/\x00/g, "");
+  s = s.replace(/<[^>]*>/g, "");
+  s = s.replace(/[<>]/g, "");
+  s = s.replace(/\s+/g, " ").trim();
+  return s;
 }
 
 export function sanitizeNumber(input: unknown): number {
