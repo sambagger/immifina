@@ -1,10 +1,13 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/navigation";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { localeFromParam } from "@/lib/locale-route";
+import { routing } from "@/i18n/routing";
 
-export async function LandingNav() {
-  const t = await getTranslations("nav");
-  const tl = await getTranslations("landing");
+export async function LandingNav({ locale }: { locale?: string }) {
+  const loc = locale != null ? localeFromParam(locale) : routing.defaultLocale;
+  const t = await getTranslations({ locale: loc, namespace: "nav" });
+  const tl = await getTranslations({ locale: loc, namespace: "landing" });
 
   return (
     <header className="border-b border-border bg-surface/80 backdrop-blur-sm">

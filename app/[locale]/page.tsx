@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/navigation";
+import { localeFromParam } from "@/lib/locale-route";
 import { AnimatedBackground } from "@/components/ui/AnimatedBackground";
 import { LegalFooter } from "@/components/LegalFooter";
 import { LandingNav } from "@/components/landing/LandingNav";
@@ -7,13 +8,15 @@ import { WaitlistForm } from "@/components/landing/WaitlistForm";
 import { Card } from "@/components/ui/Card";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
-export default async function HomePage() {
-  const t = await getTranslations("landing");
+export default async function HomePage({ params }: { params: { locale: string } }) {
+  const locale = localeFromParam(params.locale);
+  const t = await getTranslations({ locale, namespace: "landing" });
+  const tc = await getTranslations({ locale, namespace: "common" });
 
   return (
     <>
       <AnimatedBackground />
-      <LandingNav />
+      <LandingNav locale={params.locale} />
       <main>
         <ScrollReveal>
           <section className="mx-auto max-w-6xl px-4 py-16 md:px-8 md:py-24">
@@ -185,19 +188,38 @@ export default async function HomePage() {
       </main>
 
       <ScrollReveal>
-      <footer className="border-t border-border bg-surface py-10">
+      <footer className="border-t border-border bg-surface py-6 md:py-6">
         <div className="mx-auto max-w-6xl px-4 md:px-8">
-          <div className="flex flex-col gap-6 md:flex-row md:justify-between">
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <div>
               <p className="font-display text-lg text-ink">{t("logo")}</p>
-              <p className="mt-2 text-sm text-muted">{t("footerProduct")}</p>
+              <p className="mt-1 text-sm text-muted">{t("footerProduct")}</p>
             </div>
-            <div className="text-sm text-muted">
-              <p>{t("footerLegal")}</p>
+            <div className="text-sm">
+              <p className="font-medium text-ink">{t("footerPolicies")}</p>
+              <ul className="mt-2 space-y-1.5 text-muted">
+                <li>
+                  <Link
+                    href="/terms"
+                    className="transition-colors hover:text-ink focus-visible:focus-ring rounded-sm"
+                  >
+                    {tc("termsOfService")}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/privacy"
+                    className="transition-colors hover:text-ink focus-visible:focus-ring rounded-sm"
+                  >
+                    {tc("privacyPolicy")}
+                  </Link>
+                </li>
+              </ul>
             </div>
           </div>
-          <div className="mt-8">
-            <LegalFooter />
+          <div className="mt-4 border-t border-border pt-4">
+            <LegalFooter align="left" className="max-w-3xl" />
+            <p className="mt-3 text-xs text-muted">{tc("copyright")}</p>
           </div>
         </div>
       </footer>

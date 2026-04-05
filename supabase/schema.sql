@@ -25,6 +25,23 @@ create table if not exists financial_profiles (
   household_size integer default 1,
   state_of_residence char(2),
   has_children boolean default false,
+  onboarding_completed_at timestamptz,
+  immigration_situation text,
+  has_ssn boolean default false,
+  has_itin boolean default false,
+  years_in_us integer,
+  country_of_origin text,
+  primary_goal text,
+  employment_status text,
+  children_under_18 boolean default false,
+  current_debt numeric(12,2) default 0,
+  expense_housing numeric(12,2) default 0,
+  expense_food numeric(12,2) default 0,
+  expense_transport numeric(12,2) default 0,
+  expense_utilities numeric(12,2) default 0,
+  expense_remittance numeric(12,2) default 0,
+  expense_other numeric(12,2) default 0,
+  monthly_can_save numeric(12,2),
   updated_at timestamptz default now()
 );
 
@@ -59,6 +76,13 @@ alter table messages enable row level security;
 alter table forecast_snapshots enable row level security;
 
 -- Policies match PRD; effective when using Supabase Auth with matching user id.
+-- Drop first so this file can be re-run in the SQL editor without 42710 errors.
+drop policy if exists "users_own_data" on users;
+drop policy if exists "profiles_own_data" on financial_profiles;
+drop policy if exists "conversations_own_data" on conversations;
+drop policy if exists "messages_own_data" on messages;
+drop policy if exists "forecasts_own_data" on forecast_snapshots;
+
 create policy "users_own_data" on users for all using (id = auth.uid());
 create policy "profiles_own_data" on financial_profiles for all using (user_id = auth.uid());
 create policy "conversations_own_data" on conversations for all using (user_id = auth.uid());

@@ -161,8 +161,20 @@ export function DashboardShell({ children }: { children: ReactNode }) {
         <ScrollReveal className="flex-1 px-4 py-6 md:px-8 md:py-10">
           {children}
         </ScrollReveal>
-        <div className="mt-auto border-t border-border bg-surface px-4 py-6 md:px-8">
-          <LegalFooter />
+        <div className="mt-auto space-y-3 border-t border-border bg-surface px-4 py-4 md:px-8">
+          <p className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted md:justify-end">
+            <Link href="/terms" className="hover:text-ink">
+              {tCommon("termsOfService")}
+            </Link>
+            <span aria-hidden className="text-border-strong">
+              ·
+            </span>
+            <Link href="/privacy" className="hover:text-ink">
+              {tCommon("privacyPolicy")}
+            </Link>
+          </p>
+          <LegalFooter align="right" />
+          <p className="text-xs text-muted md:text-right">{tCommon("copyright")}</p>
         </div>
       </div>
 

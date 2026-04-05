@@ -1,8 +1,10 @@
 import { getTranslations } from "next-intl/server";
+import { localeFromParam } from "@/lib/locale-route";
 import { ForecastClient } from "@/components/forecast/ForecastClient";
 
-export default async function ForecastPage() {
-  const t = await getTranslations("forecast");
+export default async function ForecastPage({ params }: { params: { locale: string } }) {
+  const locale = localeFromParam(params.locale);
+  const t = await getTranslations({ locale, namespace: "forecast" });
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">

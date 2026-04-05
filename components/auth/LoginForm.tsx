@@ -18,6 +18,7 @@ const ClientLoginSchema = z.object({
 export function LoginForm() {
   const t = useTranslations("auth");
   const tNav = useTranslations("nav");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -132,8 +133,20 @@ export function LoginForm() {
           {tNav("register")}
         </Link>
       </p>
-      <div className="mt-8 border-t border-border pt-6">
+      <div className="mt-6 space-y-3 border-t border-border pt-4">
+        <p className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-center text-xs text-muted">
+          <Link href="/terms" className="hover:text-ink">
+            {tCommon("termsOfService")}
+          </Link>
+          <span aria-hidden className="text-border-strong">
+            ·
+          </span>
+          <Link href="/privacy" className="hover:text-ink">
+            {tCommon("privacyPolicy")}
+          </Link>
+        </p>
         <LegalFooter />
+        <p className="text-center text-xs text-muted">{tCommon("copyright")}</p>
       </div>
     </Card>
   );

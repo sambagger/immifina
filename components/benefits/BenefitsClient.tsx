@@ -22,8 +22,10 @@ export function BenefitsClient() {
   const [annualIncome, setAnnualIncome] = useState(45000);
   const [hasChildren, setHasChildren] = useState(false);
   const [immigrationStatus, setImmigrationStatus] = useState<
-    "citizen" | "permanent_resident" | "visa_holder" | "other"
+    "citizen" | "permanent_resident" | "visa_holder" | "daca" | "other"
   >("citizen");
+  const [hasChildrenUnder5, setHasChildrenUnder5] = useState(false);
+  const [pregnantOrNewborn, setPregnantOrNewborn] = useState(false);
   const [programs, setPrograms] = useState<ProgramRow[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,6 +43,8 @@ export function BenefitsClient() {
           householdSize,
           annualIncome,
           hasChildren,
+          hasChildrenUnder5,
+          pregnantOrNewborn,
           immigrationStatus,
         }),
       });
@@ -60,6 +64,7 @@ export function BenefitsClient() {
   return (
     <div className="space-y-8">
       <p className="text-muted">{t("subtitle")}</p>
+      <p className="text-sm text-muted">{t("privacyLead")}</p>
       <Card>
         <form className="grid gap-4 md:grid-cols-2" onSubmit={onSubmit}>
           <div className="md:col-span-2">
@@ -129,6 +134,55 @@ export function BenefitsClient() {
               </label>
             </div>
           </div>
+          {hasChildren ? (
+            <div className="md:col-span-2">
+              <span className="text-sm font-medium text-ink">{t("childrenUnder5")}</span>
+              <div className="mt-2 flex gap-4">
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="radio"
+                    name="u5"
+                    checked={hasChildrenUnder5}
+                    onChange={() => setHasChildrenUnder5(true)}
+                  />
+                  {t("childrenYes")}
+                </label>
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="radio"
+                    name="u5"
+                    checked={!hasChildrenUnder5}
+                    onChange={() => setHasChildrenUnder5(false)}
+                  />
+                  {t("childrenNo")}
+                </label>
+              </div>
+            </div>
+          ) : null}
+          <div className="md:col-span-2">
+            <span className="text-sm font-medium text-ink">{t("pregnant")}</span>
+            <div className="mt-2 flex gap-4">
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="radio"
+                  name="preg"
+                  checked={pregnantOrNewborn}
+                  onChange={() => setPregnantOrNewborn(true)}
+                />
+                {t("childrenYes")}
+              </label>
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="radio"
+                  name="preg"
+                  checked={!pregnantOrNewborn}
+                  onChange={() => setPregnantOrNewborn(false)}
+                />
+                {t("childrenNo")}
+              </label>
+            </div>
+            <p className="mt-1 text-xs text-muted">{t("pregnantHint")}</p>
+          </div>
           <div className="md:col-span-2">
             <label htmlFor="im" className="text-sm font-medium text-ink">
               {t("status")}
@@ -144,6 +198,7 @@ export function BenefitsClient() {
               <option value="citizen">{t("statusCitizen")}</option>
               <option value="permanent_resident">{t("statusPR")}</option>
               <option value="visa_holder">{t("statusVisa")}</option>
+              <option value="daca">{t("statusDaca")}</option>
               <option value="other">{t("statusOther")}</option>
             </Select>
           </div>

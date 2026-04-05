@@ -22,6 +22,10 @@ export function RemittanceClient() {
   return (
     <div className="space-y-8">
       <p className="text-muted">{t("subtitle")}</p>
+      <Card>
+        <h2 className="text-lg font-semibold text-ink">{t("introTitle")}</h2>
+        <p className="mt-2 text-sm text-muted">{t("introBody")}</p>
+      </Card>
       <p className="text-xs text-muted">{tCommon("remittanceDisclaimer")}</p>
 
       <Card>
@@ -63,6 +67,13 @@ export function RemittanceClient() {
             </Select>
           </div>
         </div>
+        <p className="mt-4 text-xs text-muted">
+          {method === "bank"
+            ? t("bankHelp")
+            : method === "cash"
+              ? t("cashHelp")
+              : t("walletHelp")}
+        </p>
       </Card>
 
       <Card>
@@ -106,6 +117,18 @@ export function RemittanceClient() {
             </tbody>
           </table>
         </div>
+      </Card>
+
+      <Card>
+        <h2 className="text-lg font-semibold text-ink">{t("tipsTitle")}</h2>
+        <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-muted">
+          <li>{t("tip1")}</li>
+          <li>{t("tip2")}</li>
+          <li>{t("tip3")}</li>
+          <li>{t("tip4")}</li>
+          <li>{t("tip5")}</li>
+          <li>{t("tip6")}</li>
+        </ul>
       </Card>
     </div>
   );

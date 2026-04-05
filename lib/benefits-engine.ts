@@ -68,6 +68,7 @@ export function matchBenefits(input: BenefitsInput): ProgramMatch[] {
         if (input.hasChildren && fplRatio <= 1.85) eligibilityKey = "high";
         else if (input.hasChildren && fplRatio <= 2.2) eligibilityKey = "medium";
         else eligibilityKey = "low";
+        if (input.hasChildrenUnder5 === true && eligibilityKey === "medium") eligibilityKey = "high";
         break;
       case "liheap":
         if (fplRatio <= 1.5) eligibilityKey = "high";
@@ -92,7 +93,7 @@ export function matchBenefits(input: BenefitsInput): ProgramMatch[] {
     }
 
     if (
-      input.immigrationStatus === "visa_holder" &&
+      (input.immigrationStatus === "visa_holder" || input.immigrationStatus === "daca") &&
       (p.id === "medicaid" || p.id === "snap")
     ) {
       eligibilityKey =

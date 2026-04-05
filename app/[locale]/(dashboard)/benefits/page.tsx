@@ -1,8 +1,10 @@
 import { getTranslations } from "next-intl/server";
+import { localeFromParam } from "@/lib/locale-route";
 import { BenefitsClient } from "@/components/benefits/BenefitsClient";
 
-export default async function BenefitsPage() {
-  const t = await getTranslations("benefits");
+export default async function BenefitsPage({ params }: { params: { locale: string } }) {
+  const locale = localeFromParam(params.locale);
+  const t = await getTranslations({ locale, namespace: "benefits" });
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">

@@ -36,6 +36,7 @@ function buildSchema(t: (key: string) => string) {
 export function RegisterForm() {
   const t = useTranslations("auth");
   const tNav = useTranslations("nav");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const schema = useMemo(() => buildSchema(t), [t]);
 
@@ -93,7 +94,7 @@ export function RegisterForm() {
         } else setError(t("genericError"));
         return;
       }
-      if (data.success) router.push("/dashboard");
+      if (data.success) router.push("/onboarding");
     } catch {
       setError(t("genericError"));
     } finally {
@@ -212,6 +213,20 @@ export function RegisterForm() {
             {error}
           </p>
         ) : null}
+        <p className="text-xs leading-relaxed text-muted">
+          {t.rich("agreeToTerms", {
+            terms: (chunks) => (
+              <Link href="/terms" className="text-accent underline-offset-2 hover:underline">
+                {chunks}
+              </Link>
+            ),
+            privacy: (chunks) => (
+              <Link href="/privacy" className="text-accent underline-offset-2 hover:underline">
+                {chunks}
+              </Link>
+            ),
+          })}
+        </p>
         <Button type="submit" className="w-full" disabled={loading}>
           {loading ? "…" : t("submitRegister")}
         </Button>
@@ -221,8 +236,20 @@ export function RegisterForm() {
           {tNav("login")}
         </Link>
       </p>
-      <div className="mt-8 border-t border-border pt-6">
+      <div className="mt-6 space-y-3 border-t border-border pt-4">
+        <p className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-center text-xs text-muted">
+          <Link href="/terms" className="hover:text-ink">
+            {tCommon("termsOfService")}
+          </Link>
+          <span aria-hidden className="text-border-strong">
+            ·
+          </span>
+          <Link href="/privacy" className="hover:text-ink">
+            {tCommon("privacyPolicy")}
+          </Link>
+        </p>
         <LegalFooter />
+        <p className="text-center text-xs text-muted">{tCommon("copyright")}</p>
       </div>
     </Card>
   );

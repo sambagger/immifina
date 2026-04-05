@@ -1,10 +1,17 @@
 import { getTranslations } from "next-intl/server";
+import { localeFromParam } from "@/lib/locale-route";
 import { Link } from "@/navigation";
 import { Card } from "@/components/ui/Card";
 import { LegalFooter } from "@/components/LegalFooter";
 
-export default async function ForgotPasswordPage() {
-  const t = await getTranslations("auth");
+export default async function ForgotPasswordPage({
+  params,
+}: {
+  params: { locale: string };
+}) {
+  const locale = localeFromParam(params.locale);
+  const t = await getTranslations({ locale, namespace: "auth" });
+  const tc = await getTranslations({ locale, namespace: "common" });
 
   return (
     <Card className="w-full max-w-md">
@@ -18,8 +25,20 @@ export default async function ForgotPasswordPage() {
           {t("backToLogin")}
         </Link>
       </p>
-      <div className="mt-8 border-t border-border pt-6">
+      <div className="mt-6 space-y-3 border-t border-border pt-4">
+        <p className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-center text-xs text-muted">
+          <Link href="/terms" className="hover:text-ink">
+            {tc("termsOfService")}
+          </Link>
+          <span aria-hidden className="text-border-strong">
+            ·
+          </span>
+          <Link href="/privacy" className="hover:text-ink">
+            {tc("privacyPolicy")}
+          </Link>
+        </p>
         <LegalFooter />
+        <p className="text-center text-xs text-muted">{tc("copyright")}</p>
       </div>
     </Card>
   );

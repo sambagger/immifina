@@ -77,7 +77,7 @@ export async function POST(request: Request) {
     );
   }
 
-  await supabase.from("financial_profiles").insert({
+  const { error: profileErr } = await supabase.from("financial_profiles").insert({
     user_id: user.id,
     monthly_income: 0,
     monthly_expenses: 0,
@@ -86,6 +86,10 @@ export async function POST(request: Request) {
     household_size: 1,
     has_children: false,
   });
+  if (profileErr) {
+    console.error("[auth/register] financial_profiles insert:", profileErr);
+    /* PATCH /api/profile will insert a row if missing (e.g. transient failure). */
+  }
 
   return jsonWithSessionCookie(
     {

@@ -1,8 +1,10 @@
 import { getTranslations } from "next-intl/server";
+import { localeFromParam } from "@/lib/locale-route";
 import { RemittanceClient } from "@/components/remittance/RemittanceClient";
 
-export default async function RemittancePage() {
-  const t = await getTranslations("remittance");
+export default async function RemittancePage({ params }: { params: { locale: string } }) {
+  const locale = localeFromParam(params.locale);
+  const t = await getTranslations({ locale, namespace: "remittance" });
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">

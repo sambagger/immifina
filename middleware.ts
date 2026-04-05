@@ -17,6 +17,9 @@ const PROTECTED_ROUTES = [
 ];
 const AUTH_ROUTES = ["/login", "/register", "/forgot-password"];
 
+/** Logged-in users only; same session check as dashboard. */
+const ONBOARDING_ROUTE = "/onboarding";
+
 /** next-intl may use /en/... internally; `startsWith("/dashboard")` fails for "/en/dashboard". */
 function withoutLocalePrefix(pathname: string): string {
   for (const loc of routing.locales) {
@@ -35,9 +38,10 @@ export async function middleware(request: NextRequest) {
   const session = request.cookies.get("session");
 
   const isProtected = PROTECTED_ROUTES.some((r) => path.startsWith(r));
+  const isOnboarding = path === ONBOARDING_ROUTE || path.startsWith(`${ONBOARDING_ROUTE}/`);
   const isAuth = AUTH_ROUTES.some((r) => path.startsWith(r));
 
-  if (isProtected) {
+  if (isProtected || isOnboarding) {
     if (!session?.value) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
