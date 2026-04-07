@@ -76,11 +76,11 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <h1 className="font-display text-2xl text-ink">{t("loginTitle")}</h1>
+    <Card variant="glass" className="w-full max-w-md rounded-2xl p-6 md:p-8">
+      <h1 className="font-display text-3xl leading-tight text-landing-title md:text-4xl">{t("loginTitle")}</h1>
       <form className="mt-8 space-y-4" onSubmit={onSubmit} noValidate>
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-ink">
+          <label htmlFor="email" className="block text-sm font-medium text-landing-body">
             {t("email")}
           </label>
           <Input
@@ -91,12 +91,13 @@ export function LoginForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="mt-1"
+            variant="onDark"
             aria-invalid={Boolean(error)}
             aria-describedby={error ? "login-error" : undefined}
           />
         </div>
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-ink">
+          <label htmlFor="password" className="block text-sm font-medium text-landing-body">
             {t("password")}
           </label>
           <Input
@@ -107,46 +108,57 @@ export function LoginForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="mt-1"
+            variant="onDark"
             aria-invalid={Boolean(error)}
             aria-describedby={error ? "login-error" : undefined}
           />
         </div>
         {error ? (
           <div id="login-error" role="alert" className="space-y-2">
-            <p className="text-sm text-red">{error}</p>
+            <p className="text-sm text-red-300">{error}</p>
             {showWrongPasswordHint ? (
-              <p className="text-xs text-muted">{t("invalidCredentialsHint")}</p>
+              <p className="text-xs text-zinc-400">{t("invalidCredentialsHint")}</p>
             ) : null}
           </div>
         ) : null}
-        <Button type="submit" className="w-full" disabled={loading}>
+        <Button
+          type="submit"
+          className="w-full rounded-full border border-white/25 py-3.5 text-sm font-semibold shadow-[0_4px_24px_rgba(0,0,0,0.45)]"
+          disabled={loading}
+        >
           {loading ? "…" : t("submitLogin")}
         </Button>
       </form>
       <p className="mt-4 text-center text-sm">
-        <Link href="/forgot-password" className="text-accent underline-offset-2 hover:underline">
+        <Link
+          href="/forgot-password"
+          className="text-landing-title underline-offset-2 transition-colors hover:text-white"
+        >
           {t("forgotLink")}
         </Link>
       </p>
-      <p className="mt-6 text-center text-sm text-muted">
-        <Link href="/register" className="text-accent underline-offset-2 hover:underline">
+      <p className="mt-6 text-center text-sm text-zinc-300">
+        <Link
+          href="/register"
+          className="font-medium text-landing-title underline-offset-2 transition-colors hover:text-white"
+        >
           {tNav("register")}
         </Link>
       </p>
-      <div className="mt-6 space-y-3 border-t border-border pt-4">
-        <p className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-center text-xs text-muted">
-          <Link href="/terms" className="hover:text-ink">
+      <div className="mt-6 space-y-3 border-t border-white/10 pt-4">
+        <p className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-center text-xs text-zinc-400">
+          <Link href="/terms" className="transition-colors hover:text-white">
             {tCommon("termsOfService")}
           </Link>
-          <span aria-hidden className="text-border-strong">
+          <span aria-hidden className="text-zinc-600">
             ·
           </span>
-          <Link href="/privacy" className="hover:text-ink">
+          <Link href="/privacy" className="transition-colors hover:text-white">
             {tCommon("privacyPolicy")}
           </Link>
         </p>
-        <LegalFooter />
-        <p className="text-center text-xs text-muted">{tCommon("copyright")}</p>
+        <LegalFooter variant="onDark" />
+        <p className="text-center text-xs text-zinc-500">{tCommon("copyright")}</p>
       </div>
     </Card>
   );

@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Card } from "@/components/ui/Card";
+import { EducationalDisclaimer } from "@/components/ui/EducationalDisclaimer";
 import { US_STATES } from "@/lib/us-states";
+import { estimateEitcMaxCredit } from "@/lib/eitc-data";
 
 type ProgramRow = {
   id: string;
@@ -29,6 +31,8 @@ export function BenefitsClient() {
   const [programs, setPrograms] = useState<ProgramRow[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [publicChargeAck, setPublicChargeAck] = useState(false);
+  const [earnedIncome, setEarnedIncome] = useState(true);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -61,10 +65,68 @@ export function BenefitsClient() {
     }
   }
 
+  const childCount = hasChildren ? Math.min(Math.max(householdSize - 1, 1), 3) : 0;
+  const eitcMax = estimateEitcMaxCredit(annualIncome, childCount);
+
   return (
     <div className="space-y-8">
-      <p className="text-muted">{t("subtitle")}</p>
-      <p className="text-sm text-muted">{t("privacyLead")}</p>
+      <div>
+        <p className="text-lg font-medium text-ink">{t("hook")}</p>
+        <p className="mt-2 text-sm text-muted">{t("subtitle")}</p>
+        <p className="mt-2 text-sm text-muted">{t("privacyLead")}</p>
+      </div>
+
+      <Card className="border-emerald-600/25 bg-emerald-500/5">
+        <h2 className="text-lg font-semibold text-ink">{t("reassuranceTitle")}</h2>
+        <p className="mt-3 text-sm text-muted">{t("reassuranceBody")}</p>
+      </Card>
+
+      <Card>
+        <h2 className="text-lg font-semibold text-ink">{t("bucketsTitle")}</h2>
+        <ul className="mt-4 space-y-4 text-sm">
+          <li>
+            <p className="font-medium text-ink">{t("bucketSafeTitle")}</p>
+            <p className="mt-1 text-muted">{t("bucketSafeBody")}</p>
+          </li>
+          <li>
+            <p className="font-medium text-ink">{t("bucketDependsTitle")}</p>
+            <p className="mt-1 text-muted">{t("bucketDependsBody")}</p>
+          </li>
+          <li>
+            <p className="font-medium text-ink">{t("bucketExpertTitle")}</p>
+            <p className="mt-1 text-muted">{t("bucketExpertBody")}</p>
+          </li>
+        </ul>
+      </Card>
+
+      <Card>
+        <h2 className="text-lg font-semibold text-ink">{t("publicChargeTitle")}</h2>
+        <p className="mt-3 text-sm text-muted">{t("publicChargeLead")}</p>
+        <details className="details-disclosure mt-4 rounded-control border border-border bg-bg">
+          <summary className="cursor-pointer p-3 text-sm font-medium text-ink">
+            {t("publicChargeReadMore")}
+          </summary>
+          <div className="border-t border-border p-3">
+            <p className="whitespace-pre-line text-sm text-muted">{t("publicChargeBody")}</p>
+          </div>
+        </details>
+        <a
+          href="https://www.immigrationadvocates.org/legaldirectory"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 inline-block text-sm font-medium text-accent underline-offset-2 hover:underline"
+        >
+          {t("publicChargeLink")} ↗
+        </a>
+        <p className="mt-4 text-sm text-muted">{t("publicChargeFooter")}</p>
+        {!publicChargeAck ? (
+          <Button type="button" className="mt-4" onClick={() => setPublicChargeAck(true)}>
+            {t("publicChargeAck")}
+          </Button>
+        ) : null}
+      </Card>
+
+      {publicChargeAck ? (
       <Card>
         <form className="grid gap-4 md:grid-cols-2" onSubmit={onSubmit}>
           <div className="md:col-span-2">
@@ -110,6 +172,29 @@ export function BenefitsClient() {
               onChange={(e) => setAnnualIncome(Number(e.target.value))}
               className="mt-1 font-figures"
             />
+          </div>
+          <div className="md:col-span-2">
+            <span className="text-sm font-medium text-ink">{t("earnedIncomeLabel")}</span>
+            <div className="mt-2 flex gap-4">
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="radio"
+                  name="earned"
+                  checked={earnedIncome}
+                  onChange={() => setEarnedIncome(true)}
+                />
+                {t("earnedIncomeYes")}
+              </label>
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="radio"
+                  name="earned"
+                  checked={!earnedIncome}
+                  onChange={() => setEarnedIncome(false)}
+                />
+                {t("earnedIncomeNo")}
+              </label>
+            </div>
           </div>
           <div className="md:col-span-2">
             <span className="text-sm font-medium text-ink">{t("children")}</span>
@@ -209,6 +294,7 @@ export function BenefitsClient() {
           </div>
         </form>
       </Card>
+      ) : null}
 
       <p className="text-xs text-muted">{tCommon("benefitsDisclaimer")}</p>
 
@@ -220,6 +306,54 @@ export function BenefitsClient() {
 
       {programs ? (
         <ul className="space-y-4">
+          {earnedIncome && eitcMax != null ? (
+            <li>
+              <Card className="border-2 border-emerald-600/50 bg-emerald-500/5 p-6 md:p-8">
+                <p className="text-2xl" aria-hidden>
+                  💰
+                </p>
+                <h3 className="mt-2 text-xl font-semibold text-ink">{t("eitcTitle")}</h3>
+                <p className="mt-2 text-sm text-muted">{t("eitcLead")}</p>
+                <p className="mt-3 text-sm font-medium text-ink">{t("eitcWhat")}</p>
+                <p className="mt-1 text-sm text-muted">{t("eitcWhatBody")}</p>
+                <p className="mt-4 font-figures text-lg text-accent-text">
+                  {t("eitcEstimate", {
+                    household: String(householdSize),
+                    income: annualIncome.toLocaleString(),
+                    max: eitcMax.toLocaleString(),
+                  })}
+                </p>
+                <p className="mt-4 text-sm font-medium text-ink">{t("eitcWho")}</p>
+                <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-muted">
+                  <li>{t("eitcWho1")}</li>
+                  <li>{t("eitcWho2")}</li>
+                  <li>{t("eitcWho3")}</li>
+                  <li>{t("eitcWho4")}</li>
+                </ul>
+                <p className="mt-4 text-sm font-medium text-ink">{t("eitcVita")}</p>
+                <p className="mt-1 text-sm text-muted">{t("eitcVitaBody")}</p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <a
+                    href="https://www.irs.gov/vita"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-medium text-accent underline-offset-2 hover:underline"
+                  >
+                    {t("eitcVitaLink")} ↗
+                  </a>
+                  <a
+                    href="https://www.irs.gov/es"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-medium text-accent underline-offset-2 hover:underline"
+                  >
+                    {t("eitcEsLink")} ↗
+                  </a>
+                </div>
+                <p className="mt-4 text-xs text-faint">{t("eitcWarn")}</p>
+              </Card>
+            </li>
+          ) : null}
           {programs.map((p) => (
             <li key={p.id}>
               <Card className="hover:border-border-strong">
@@ -251,6 +385,17 @@ export function BenefitsClient() {
           ))}
         </ul>
       ) : null}
+
+      <Card>
+        <h2 className="text-lg font-semibold text-ink">{t("nextStepsTitle")}</h2>
+        <ul className="mt-4 list-inside list-disc space-y-2 text-sm text-muted">
+          <li>{t("nextStep1")}</li>
+          <li>{t("nextStep2")}</li>
+          <li>{t("nextStep3")}</li>
+        </ul>
+      </Card>
+
+      <EducationalDisclaimer topic="benefits" />
     </div>
   );
 }

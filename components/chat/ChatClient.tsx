@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { EducationalDisclaimer } from "@/components/ui/EducationalDisclaimer";
 
 const LAST_CHAT_KEY = "immifina_last_chat";
 /** Skip auto-opening a thread after "New conversation" (see sessionStorage). */
@@ -331,6 +332,7 @@ export function ChatClient() {
             </Button>
           </form>
         </div>
+        <EducationalDisclaimer topic="general" className="mt-4 shrink-0" />
       </div>
     </div>
   );

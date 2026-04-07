@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { verifySession } from "@/lib/auth";
+import { getClientIp } from "@/lib/client-ip";
 import { createServiceClient, isSupabaseConfigured } from "@/lib/db";
 import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { sanitizeNumber, sanitizeString } from "@/lib/sanitize";
@@ -28,7 +29,7 @@ function missingColumnFromPostgrestMessage(message: string): string | null {
 }
 
 export async function GET(request: Request) {
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const ip = getClientIp(request);
   const { success } = rateLimit(`api:${ip}`, RATE_LIMITS.api);
   if (!success) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
@@ -76,7 +77,7 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const ip = getClientIp(request);
   const { success } = rateLimit(`api:${ip}`, RATE_LIMITS.api);
   if (!success) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });

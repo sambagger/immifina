@@ -3,6 +3,9 @@ import { AnimatedBackground } from "@/components/ui/AnimatedBackground";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import { fetchWithSession } from "@/lib/server-fetch";
 
+/** Uses `cookies()` / `headers()` via fetchWithSession — cannot be statically prerendered. */
+export const dynamic = "force-dynamic";
+
 export default async function DashboardLayout({
   children,
 }: {

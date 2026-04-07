@@ -7,9 +7,10 @@
   --color-surface: #ffffff;
   --color-border: #e8e6e0;
   --color-border-strong: #c8c5bc;
-  --color-text-primary: #000000;
-  --color-text-secondary: #000000;
-  --color-text-muted: #000000;
+  /* Primary copy — brand greens (was black) */
+  --color-text-primary: #0f4a35;
+  --color-text-secondary: #145239;
+  --color-text-muted: #1d6b4f;
   --color-accent: #1d6b4f;
   --color-accent-light: #e8f5ef;
   --color-accent-text: #0f4a35;
@@ -28,15 +29,18 @@ html {
 body {
   color: var(--color-text-primary);
   background-color: var(--color-bg);
-  font-family: var(--font-poppins), system-ui, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
 }
 
+/* Headings & brand — Playfair Display; body is Inter */
 .font-display {
-  font-family: var(--font-poppins), system-ui, sans-serif;
+  font-family: var(--font-playfair), ui-serif, Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 .font-figures {
-  font-family: var(--font-poppins), system-ui, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
 }
 
@@ -215,6 +219,66 @@ body {
 }
 .drift-8 {
   animation: drift-8 50s ease-in-out infinite;
+}
+
+@layer components {
+  /**
+   * Expandable <details> — trailing chevron (closed → right, open → down).
+   * Add class `details-disclosure` on <details>; keep summary as flex content + ::after chevron.
+   */
+  details.details-disclosure > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    list-style: none;
+  }
+
+  details.details-disclosure > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details.details-disclosure > summary::marker {
+    content: "";
+  }
+
+  details.details-disclosure > summary::after {
+    content: "";
+    flex-shrink: 0;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-style: solid;
+    border-width: 0 2px 2px 0;
+    border-color: currentColor;
+    opacity: 0.5;
+    transform: rotate(-45deg);
+    transition: transform 0.2s ease;
+  }
+
+  details.details-disclosure[open] > summary::after {
+    transform: rotate(45deg);
+  }
+
+  /**
+   * Summary has two DOM children + ::after chevron: [main] [trailing label] [arrow].
+   * Without this, a single inner wrapper makes the arrow sit after the whole block and
+   * the trailing label’s horizontal position shifts per row.
+   */
+  details.details-disclosure.details-disclosure--summary-trailing > summary {
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  details.details-disclosure.details-disclosure--summary-trailing > summary::after {
+    margin-top: 0.2rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    details.details-disclosure > summary::after {
+      transition: none;
+    }
+  }
 }
 
 @layer utilities {

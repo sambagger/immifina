@@ -16,7 +16,7 @@ function estimateRange(q: Q): { low: number; high: number } {
   let base = 580;
   if (q.accounts === "none") base = 520;
   else if (q.accounts === "few") base = 600;
-  else base = 660;
+  else base = 710;
   if (q.oldest === "none" || q.oldest === "lt6") base -= 40;
   if (q.oldest === "3p") base += 30;
   if (q.missed === "several") base -= 80;

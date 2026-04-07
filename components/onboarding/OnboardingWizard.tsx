@@ -168,11 +168,11 @@ export function OnboardingWizard() {
               {t("hasItin")}
             </label>
           </div>
-          <details className="mt-2 text-xs text-muted">
+          <details className="details-disclosure mt-2 text-xs text-muted">
             <summary className="cursor-pointer text-accent">{t("whatSsn")}</summary>
             <p className="mt-2">{t("whatSsnBody")}</p>
           </details>
-          <details className="mt-2 text-xs text-muted">
+          <details className="details-disclosure mt-2 text-xs text-muted">
             <summary className="cursor-pointer text-accent">{t("whatItin")}</summary>
             <p className="mt-2">{t("whatItinBody")}</p>
           </details>

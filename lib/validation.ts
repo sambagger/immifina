@@ -19,6 +19,10 @@ export const LoginSchema = z.object({
   password: z.string().min(1).max(128),
 });
 
+export const WaitlistSchema = z.object({
+  email: z.string().email().max(255),
+});
+
 export const ChatMessageSchema = z.object({
   message: z.string().min(1).max(2000),
   conversationId: z.string().uuid().optional(),

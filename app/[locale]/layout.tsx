@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
+import { EducationalDisclaimerGate } from "@/components/legal/EducationalDisclaimerGate";
 import { routing, type Locale } from "@/i18n/routing";
 
 export function generateStaticParams() {
@@ -26,7 +27,7 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      {children}
+      <EducationalDisclaimerGate>{children}</EducationalDisclaimerGate>
     </NextIntlClientProvider>
   );
 }

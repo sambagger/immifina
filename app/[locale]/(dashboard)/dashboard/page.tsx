@@ -76,7 +76,7 @@ export default async function DashboardPage({
             />
           </div>
           <p className="mt-2 text-xs text-faint">{t("foundationHint")}</p>
-          <details className="mt-3 rounded-control border border-border bg-bg p-3 text-left">
+          <details className="details-disclosure mt-3 rounded-control border border-border bg-bg p-3 text-left">
             <summary className="cursor-pointer text-sm font-medium text-ink">
               {t("foundationHowTitle")}
             </summary>

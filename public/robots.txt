@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://immifina.org
+
+# Sitemaps
+Sitemap: https://immifina.org/sitemap.xml

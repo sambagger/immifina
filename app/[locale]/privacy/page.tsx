@@ -20,7 +20,7 @@ export default async function PrivacyPage({ params }: PageProps) {
   return (
     <>
       <LandingNav locale={params.locale} />
-      <main className="mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-10">
+      <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
         <LegalDocument doc={doc} contactEmail={email} />
         <div className="mt-8 border-t border-border pt-5">
           <LegalFooter align="left" />

@@ -1,12 +1,17 @@
 import type { InputHTMLAttributes } from "react";
 
 export function Input({
+  variant = "default",
   className = "",
   ...props
-}: InputHTMLAttributes<HTMLInputElement>) {
+}: InputHTMLAttributes<HTMLInputElement> & { variant?: "default" | "onDark" }) {
+  const surface =
+    variant === "onDark"
+      ? "border-white/20 bg-black/40 text-white placeholder:text-zinc-400 hover:border-white/35"
+      : "border-border bg-surface text-ink placeholder:text-faint hover:border-border-strong";
   return (
     <input
-      className={`min-h-[44px] w-full rounded-control border border-border bg-surface px-3 py-2 text-ink transition-colors placeholder:text-faint hover:border-border-strong focus-visible:focus-ring ${className}`}
+      className={`min-h-[44px] w-full rounded-control border px-3 py-2 transition-colors focus-visible:focus-ring ${surface} ${className}`}
       {...props}
     />
   );

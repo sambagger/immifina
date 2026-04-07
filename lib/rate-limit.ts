@@ -1,3 +1,8 @@
+/**
+ * In-memory counters: best-effort per server instance. On serverless, many instances
+ * each keep their own map — aggregate limits are weaker than a shared store (Redis, etc.).
+ * See SECURITY.md.
+ */
 const rateStore = new Map<string, { count: number; resetAt: number }>();
 
 export interface RateLimitConfig {
@@ -39,4 +44,6 @@ export const RATE_LIMITS = {
   chat: { windowMs: 60 * 1000, maxRequests: 10 },
   forecast: { windowMs: 60 * 1000, maxRequests: 20 },
   api: { windowMs: 60 * 1000, maxRequests: 100 },
+  /** Waitlist signup: 3 POSTs per IP per hour */
+  waitlist: { windowMs: 60 * 60 * 1000, maxRequests: 3 },
 };

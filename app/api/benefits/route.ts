@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { verifySession } from "@/lib/auth";
+import { getClientIp } from "@/lib/client-ip";
 import { matchBenefits } from "@/lib/benefits-engine";
 import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { BenefitsInputSchema } from "@/lib/validation";
@@ -10,7 +11,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const ip = getClientIp(request);
   const { success } = rateLimit(`benefits:${session.userId}:${ip}`, RATE_LIMITS.forecast);
   if (!success) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });

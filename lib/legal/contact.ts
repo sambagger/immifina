@@ -1,4 +1,7 @@
-/** Public contact email for legal pages and mailto links. Set NEXT_PUBLIC_CONTACT_EMAIL in production. */
+/** Public contact email for legal pages, footer, and mailto links. Override with NEXT_PUBLIC_CONTACT_EMAIL. */
+export const DEFAULT_PUBLIC_CONTACT_EMAIL = "info@immifina.org";
+
 export function getContactEmail(): string {
-  return process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "contact@immifina.org";
+  const fromEnv = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim();
+  return fromEnv || DEFAULT_PUBLIC_CONTACT_EMAIL;
 }

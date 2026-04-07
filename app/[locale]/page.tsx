@@ -1,12 +1,24 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/navigation";
 import { localeFromParam } from "@/lib/locale-route";
-import { AnimatedBackground } from "@/components/ui/AnimatedBackground";
 import { LegalFooter } from "@/components/LegalFooter";
+import { LandingPageBackground } from "@/components/landing/LandingPageBackground";
 import { LandingNav } from "@/components/landing/LandingNav";
+import { LandingProductMockup } from "@/components/landing/LandingProductMockup";
 import { WaitlistForm } from "@/components/landing/WaitlistForm";
-import { Card } from "@/components/ui/Card";
+import { LandingFeaturesBento } from "@/components/landing/LandingFeaturesBento";
+import { LandingHowPanel } from "@/components/landing/LandingHowPanel";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { LandingInteractiveCard } from "@/components/landing/LandingInteractiveCard";
+import { landingLargeBodyClass } from "@/lib/landing-copy-classes";
+
+/** Centered page width + horizontal padding (all landing sections). */
+const shell = "mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8";
+/** Vertical rhythm between major sections. */
+const sectionY = "py-16 md:py-24 lg:py-28";
+/** Centered section headings (problem, testimonials, languages, etc.). */
+const sectionTitleCenter =
+  "font-display max-w-3xl text-3xl text-landing-title md:text-4xl lg:text-[2.75rem] xl:text-[3rem] 2xl:text-[3.35rem]";
 
 export default async function HomePage({ params }: { params: { locale: string } }) {
   const locale = localeFromParam(params.locale);
@@ -15,214 +27,228 @@ export default async function HomePage({ params }: { params: { locale: string } 
 
   return (
     <>
-      <AnimatedBackground />
-      <LandingNav locale={params.locale} />
-      <main>
+      <LandingPageBackground />
+      <LandingNav locale={params.locale} overlay />
+      <main className="relative z-10">
         <ScrollReveal>
-          <section className="mx-auto max-w-6xl px-4 py-16 md:px-8 md:py-24">
-          <div className="max-w-3xl">
-            <h1 className="font-display text-4xl leading-tight tracking-tight text-ink md:text-5xl">
-              {t("heroTitle")}
-            </h1>
-            <p className="mt-6 text-lg text-muted md:text-xl">{t("heroSubtitle")}</p>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <Link
-                href="/register"
-                className="inline-flex min-h-[44px] items-center justify-center rounded-control border border-accent bg-accent px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-[#185a42] active:scale-[0.98] focus-visible:focus-ring"
-              >
-                {t("ctaPrimary")}
-              </Link>
-              <a
-                href="#how-it-works"
-                className="inline-flex min-h-[44px] items-center justify-center rounded-control border border-border bg-surface px-6 py-2 text-sm font-medium text-ink transition-colors hover:bg-accent-light hover:border-border-strong active:scale-[0.98] focus-visible:focus-ring"
-              >
-                {t("ctaSecondary")}
-              </a>
+          <section className="relative z-10">
+            <div className={`${shell} pb-8 pt-28 text-center md:pb-12 md:pt-32`}>
+              <div className="mx-auto max-w-3xl">
+                <h1 className="font-display text-[clamp(2.55rem,6.4vw,4.15rem)] font-semibold leading-[1.06] tracking-tight">
+                  <span className="block text-landing-title">{t("heroTitleLine1")}</span>
+                  <span className="mt-2 block font-normal italic text-landing-title md:mt-3">
+                    {t("heroTitleLine2Italic")}
+                  </span>
+                </h1>
+                <p className="mx-auto mt-6 max-w-2xl font-sans text-sm font-medium tracking-wide text-landing-body md:text-base">
+                  {t("heroTagline")}
+                </p>
+                <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-landing-body md:text-lg">
+                  {t("heroSubtitle")}
+                </p>
+                <div className="mt-10 flex flex-wrap items-center justify-center gap-4 md:mt-12">
+                  <Link
+                    href="/register"
+                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full border border-white/25 bg-[#1d6b4f] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_4px_24px_rgba(0,0,0,0.55),0_2px_8px_rgba(0,0,0,0.45)] transition-[transform,box-shadow] hover:shadow-[0_6px_28px_rgba(0,0,0,0.6)] active:scale-[0.98] focus-visible:focus-ring md:px-8"
+                  >
+                    {t("ctaPrimary")}
+                    <span aria-hidden>→</span>
+                  </Link>
+                  <a
+                    href="#how-it-works"
+                    className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-white/35 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white shadow-[0_4px_20px_rgba(0,0,0,0.45)] backdrop-blur-md transition-[background-color,transform] hover:bg-white/15 active:scale-[0.98] focus-visible:focus-ring md:px-8"
+                  >
+                    {t("ctaSecondary")}
+                  </a>
+                </div>
+              </div>
             </div>
-          </div>
-        </section>
-        </ScrollReveal>
-
-        <ScrollReveal>
-        <section className="border-y border-border bg-surface">
-          <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 md:grid-cols-3 md:px-8">
-            <p className="text-center text-sm leading-relaxed text-muted md:text-left">
-              {t("stats1")}
-            </p>
-            <p className="text-center text-sm leading-relaxed text-muted md:text-left">
-              {t("stats2")}
-            </p>
-            <p className="text-center text-sm leading-relaxed text-muted md:text-left">
-              {t("stats3")}
-            </p>
-          </div>
-        </section>
-        </ScrollReveal>
-
-        <ScrollReveal>
-        <section className="mx-auto max-w-6xl px-4 py-16 md:px-8 md:py-20">
-          <h2 className="font-display text-3xl text-ink md:text-4xl">{t("problemTitle")}</h2>
-          <p className="mt-6 max-w-2xl text-muted">{t("problemBody")}</p>
-        </section>
-        </ScrollReveal>
-
-        <ScrollReveal>
-        <section className="mx-auto max-w-6xl px-4 pb-16 md:px-8 md:pb-20">
-          <h2 className="font-display text-3xl text-ink md:text-4xl">{t("featuresTitle")}</h2>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            <Card>
-              <h3 className="text-lg font-semibold text-ink">{t("featForecastTitle")}</h3>
-              <p className="mt-2 text-sm text-muted">{t("featForecastDesc")}</p>
-            </Card>
-            <Card>
-              <h3 className="text-lg font-semibold text-ink">{t("featCreditTitle")}</h3>
-              <p className="mt-2 text-sm text-muted">{t("featCreditDesc")}</p>
-            </Card>
-            <Card>
-              <h3 className="text-lg font-semibold text-ink">{t("featBenefitsTitle")}</h3>
-              <p className="mt-2 text-sm text-muted">{t("featBenefitsDesc")}</p>
-            </Card>
-            <Card>
-              <h3 className="text-lg font-semibold text-ink">{t("featRemitTitle")}</h3>
-              <p className="mt-2 text-sm text-muted">{t("featRemitDesc")}</p>
-            </Card>
-          </div>
-        </section>
-        </ScrollReveal>
-
-        <ScrollReveal>
-        <section
-          id="trust"
-          className="border-t border-border bg-surface py-16 md:py-20"
-          aria-labelledby="trust-heading"
-        >
-          <div className="mx-auto max-w-6xl px-4 md:px-8">
-            <h2
-              id="trust-heading"
-              className="font-display text-3xl text-ink md:text-4xl"
-            >
-              {t("trustTitle")}
-            </h2>
-            <p className="mt-4 max-w-2xl text-muted">{t("trustLead")}</p>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
-              <Card>
-                <h3 className="text-lg font-semibold text-ink">
-                  {t("trustDataTitle")}
-                </h3>
-                <p className="mt-2 text-sm text-muted">{t("trustDataBody")}</p>
-              </Card>
-              <Card>
-                <h3 className="text-lg font-semibold text-ink">
-                  {t("trustNoBankTitle")}
-                </h3>
-                <p className="mt-2 text-sm text-muted">{t("trustNoBankBody")}</p>
-              </Card>
-              <Card>
-                <h3 className="text-lg font-semibold text-ink">
-                  {t("trustNoSellTitle")}
-                </h3>
-                <p className="mt-2 text-sm text-muted">{t("trustNoSellBody")}</p>
-              </Card>
+            <div className={`${shell} pt-0`}>
+              <LandingInteractiveCard className="w-full">
+                <LandingProductMockup locale={params.locale} />
+              </LandingInteractiveCard>
             </div>
-          </div>
-        </section>
+          </section>
         </ScrollReveal>
 
         <ScrollReveal>
-        <section
-          id="how-it-works"
-          className="border-t border-border bg-blue-light/40 py-16 md:py-20"
-        >
-          <div className="mx-auto max-w-6xl px-4 md:px-8">
-            <h2 className="font-display text-3xl text-ink md:text-4xl">{t("howTitle")}</h2>
-            <ol className="mt-10 grid gap-10 md:grid-cols-3">
-              <li>
-                <span className="font-figures text-2xl text-blue">01</span>
-                <h3 className="mt-2 text-lg font-semibold text-ink">{t("how1Title")}</h3>
-                <p className="mt-2 text-sm text-muted">{t("how1Body")}</p>
-              </li>
-              <li>
-                <span className="font-figures text-2xl text-blue">02</span>
-                <h3 className="mt-2 text-lg font-semibold text-ink">{t("how2Title")}</h3>
-                <p className="mt-2 text-sm text-muted">{t("how2Body")}</p>
-              </li>
-              <li>
-                <span className="font-figures text-2xl text-blue">03</span>
-                <h3 className="mt-2 text-lg font-semibold text-ink">{t("how3Title")}</h3>
-                <p className="mt-2 text-sm text-muted">{t("how3Body")}</p>
-              </li>
-            </ol>
-          </div>
-        </section>
-        </ScrollReveal>
-
-        <ScrollReveal>
-        <section className="mx-auto max-w-6xl px-4 py-16 md:px-8 md:py-20">
-          <h2 className="font-display text-3xl text-ink md:text-4xl">{t("langTitle")}</h2>
-          <p className="mt-4 max-w-xl text-muted">{t("langBody")}</p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <span className="rounded-badge border border-border bg-surface px-4 py-2 text-sm text-ink">
-              English
-            </span>
-            <span className="rounded-badge border border-border bg-surface px-4 py-2 text-sm text-ink">
-              Español
-            </span>
-            <span className="rounded-badge border border-border bg-surface px-4 py-2 text-sm text-ink">
-              中文（简体）
-            </span>
-          </div>
-        </section>
-        </ScrollReveal>
-
-        <ScrollReveal>
-        <section className="border-t border-border bg-accent-light/50 py-16 md:py-20">
-          <div className="mx-auto max-w-6xl px-4 text-center md:px-8">
-            <h2 className="font-display text-3xl text-ink md:text-4xl">{t("ctaBannerTitle")}</h2>
-            <p className="mx-auto mt-4 max-w-lg text-muted">{t("ctaBannerBody")}</p>
-            <div className="mt-8">
-              <WaitlistForm />
+          <section className={`border-t border-white/10 ${sectionY}`}>
+            <div className={`${shell} flex flex-col items-center gap-6 text-center md:gap-8`}>
+              <h2 className={sectionTitleCenter}>{t("problemTitle")}</h2>
+              <p className={landingLargeBodyClass}>{t("problemBody")}</p>
             </div>
-          </div>
-        </section>
+          </section>
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <section
+            id="product-features"
+            className={`scroll-mt-28 border-t border-white/10 ${sectionY}`}
+          >
+            <div className={`${shell} flex flex-col gap-6 md:gap-8`}>
+              <h2 className="font-display text-3xl text-landing-title md:text-4xl lg:text-[2.75rem]">
+                {t("featuresTitle")}
+              </h2>
+              <LandingFeaturesBento
+                headingLine1={t("featForecastHeadingLine1")}
+                headingAccent={t("featForecastHeadingAccent")}
+                lead={t("featForecastLead")}
+                snapshotLabel={t("featChartSnapshotLabel")}
+                bullets={[
+                  { title: t("featBulletForecastTitle"), description: t("featBulletForecastDesc") },
+                  { title: t("featBulletCreditTitle"), description: t("featBulletCreditDesc") },
+                  { title: t("featBulletPaycheckTitle"), description: t("featBulletPaycheckDesc") },
+                  { title: t("featBulletBenefitsTitle"), description: t("featBulletBenefitsDesc") },
+                  { title: t("featBulletBankingTitle"), description: t("featBulletBankingDesc") },
+                  { title: t("featBulletRemitTitle"), description: t("featBulletRemitDesc") },
+                ]}
+              />
+            </div>
+          </section>
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <section id="how-it-works" className={`scroll-mt-28 border-t border-white/10 ${sectionY}`}>
+            <div className={shell}>
+              <LandingHowPanel
+                titleLine1={t("howTitleLine1")}
+                titleLine2={t("howTitleLine2Italic")}
+                lead={t("howLead")}
+                steps={[
+                  { title: t("how1Title"), body: t("how1Body") },
+                  { title: t("how2Title"), body: t("how2Body") },
+                  { title: t("how3Title"), body: t("how3Body") },
+                ]}
+              />
+            </div>
+          </section>
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <section id="testimonials" className={`scroll-mt-28 border-t border-white/10 ${sectionY}`}>
+            <div className={shell}>
+              <div>
+                <div className="flex flex-col items-center text-center">
+                  <h2 className="font-display text-3xl leading-tight text-landing-title md:text-4xl lg:text-[2.75rem]">
+                    {t("testimonialsTitle")}
+                  </h2>
+                </div>
+                <div className="mt-10 overflow-hidden rounded-[28px] border border-white/15 bg-black/50 shadow-soft backdrop-blur-xl transition-all duration-300 hover:border-white/25 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)]">
+                  <div className="grid divide-y divide-white/10 md:grid-cols-3 md:divide-x md:divide-y-0">
+                    <blockquote className="flex h-full min-h-0 flex-col px-6 py-8 text-center transition-colors duration-300 hover:bg-white/[0.07] md:px-8 md:py-10 md:text-left">
+                      <p className="flex-1 text-lg leading-relaxed text-landing-body">{t("testimonial1Quote")}</p>
+                      <footer className="mt-auto flex flex-col items-center gap-1 pt-6 md:items-start">
+                        <cite className="font-display not-italic text-lg font-semibold text-landing-title">
+                          {t("testimonial1Name")}
+                        </cite>
+                        <p className="text-sm text-zinc-200">{t("testimonial1Role")}</p>
+                      </footer>
+                    </blockquote>
+                    <blockquote className="flex h-full min-h-0 flex-col px-6 py-8 text-center transition-colors duration-300 hover:bg-white/[0.07] md:px-8 md:py-10 md:text-left">
+                      <p className="flex-1 text-lg leading-relaxed text-landing-body">{t("testimonial2Quote")}</p>
+                      <footer className="mt-auto flex flex-col items-center gap-1 pt-6 md:items-start">
+                        <cite className="font-display not-italic text-lg font-semibold text-landing-title">
+                          {t("testimonial2Name")}
+                        </cite>
+                        <p className="text-sm text-zinc-200">{t("testimonial2Role")}</p>
+                      </footer>
+                    </blockquote>
+                    <blockquote className="flex h-full min-h-0 flex-col px-6 py-8 text-center transition-colors duration-300 hover:bg-white/[0.07] md:px-8 md:py-10 md:text-left">
+                      <p className="flex-1 text-lg leading-relaxed text-landing-body">{t("testimonial3Quote")}</p>
+                      <footer className="mt-auto flex flex-col items-center gap-1 pt-6 md:items-start">
+                        <cite className="font-display not-italic text-lg font-semibold text-landing-title">
+                          {t("testimonial3Name")}
+                        </cite>
+                        <p className="text-sm text-zinc-200">{t("testimonial3Role")}</p>
+                      </footer>
+                    </blockquote>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <section className={`border-t border-white/10 ${sectionY}`}>
+            <div className={`${shell} flex flex-col items-center gap-6 text-center md:gap-8`}>
+              <h2 className={sectionTitleCenter}>{t("langTitle")}</h2>
+              <p className="max-w-xl text-lg leading-relaxed text-landing-body">{t("langBody")}</p>
+              <div className="flex flex-wrap justify-center gap-3 pt-2">
+                <span className="rounded-full border border-white/25 bg-black/50 px-5 py-2.5 text-sm font-medium text-white shadow-soft backdrop-blur-md">
+                  English
+                </span>
+                <span className="rounded-full border border-white/25 bg-black/50 px-5 py-2.5 text-sm font-medium text-white shadow-soft backdrop-blur-md">
+                  Español
+                </span>
+                <span className="rounded-full border border-white/25 bg-black/50 px-5 py-2.5 text-sm font-medium text-white shadow-soft backdrop-blur-md">
+                  中文（简体）
+                </span>
+              </div>
+            </div>
+          </section>
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <section id="feedback" className={`scroll-mt-28 border-t border-white/10 ${sectionY}`}>
+            <div className={shell}>
+              <div className="overflow-hidden rounded-[28px] border border-white/15 bg-black/50 px-6 py-12 text-center shadow-soft backdrop-blur-xl md:px-12 md:py-16">
+                <p className="font-sans text-xs font-semibold uppercase tracking-[0.22em] text-zinc-200 md:text-sm">
+                  {t("ctaOverline")}
+                </p>
+                <h2 className="font-display mt-4 text-3xl text-landing-title md:mt-6 md:text-4xl lg:text-[2.65rem]">
+                  <span>{t("ctaBannerTitlePart1")}</span>{" "}
+                  <span className="italic text-landing-title">{t("ctaBannerTitleAccent")}</span>
+                </h2>
+                <p className="mx-auto mt-5 max-w-lg text-lg text-landing-body md:mt-6">{t("ctaBannerBody")}</p>
+                <div className="mt-10 [&_button]:border-accent [&_button]:!bg-[#1d6b4f] [&_button]:!text-white [&_button]:hover:!bg-[#185a42] [&_input]:border-white/20 [&_input]:bg-black/40 [&_input]:text-white [&_input]:placeholder:text-zinc-400">
+                  <WaitlistForm />
+                </div>
+              </div>
+            </div>
+          </section>
         </ScrollReveal>
       </main>
 
       <ScrollReveal>
-      <footer className="border-t border-border bg-surface py-6 md:py-6">
-        <div className="mx-auto max-w-6xl px-4 md:px-8">
-          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-            <div>
-              <p className="font-display text-lg text-ink">{t("logo")}</p>
-              <p className="mt-1 text-sm text-muted">{t("footerProduct")}</p>
+        <footer className="relative z-10 border-t border-white/10 py-12 md:py-16">
+          <div className={shell}>
+            <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+              <div className="flex flex-col gap-2">
+                <p className="font-display text-xl text-landing-title">{t("logo")}</p>
+                <p className="text-sm text-landing-body">{t("footerProduct")}</p>
+              </div>
+              <div className="flex flex-col gap-3 text-sm">
+                <p className="font-medium text-landing-title">{t("footerPolicies")}</p>
+                <ul className="flex flex-col gap-2 text-landing-body">
+                  <li>
+                    <Link
+                      href="/terms"
+                      className="rounded-sm text-landing-body transition-colors hover:text-white focus-visible:focus-ring"
+                    >
+                      {tc("termsOfService")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/privacy"
+                      className="rounded-sm text-landing-body transition-colors hover:text-white focus-visible:focus-ring"
+                    >
+                      {tc("privacyPolicy")}
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div className="text-sm">
-              <p className="font-medium text-ink">{t("footerPolicies")}</p>
-              <ul className="mt-2 space-y-1.5 text-muted">
-                <li>
-                  <Link
-                    href="/terms"
-                    className="transition-colors hover:text-ink focus-visible:focus-ring rounded-sm"
-                  >
-                    {tc("termsOfService")}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/privacy"
-                    className="transition-colors hover:text-ink focus-visible:focus-ring rounded-sm"
-                  >
-                    {tc("privacyPolicy")}
-                  </Link>
-                </li>
-              </ul>
+            <div className="mt-8 border-t border-white/15 pt-8">
+              <LegalFooter
+                align="left"
+                className="!text-landing-body [&_a]:!text-white [&_p]:!text-landing-body [&_span]:!text-landing-body"
+              />
+              <p className="mt-4 text-xs text-zinc-200">{tc("copyright")}</p>
             </div>
           </div>
-          <div className="mt-4 border-t border-border pt-4">
-            <LegalFooter align="left" className="max-w-3xl" />
-            <p className="mt-3 text-xs text-muted">{tc("copyright")}</p>
-          </div>
-        </div>
-      </footer>
+        </footer>
       </ScrollReveal>
     </>
   );

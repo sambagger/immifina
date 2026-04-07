@@ -6,6 +6,7 @@ import { getRemittanceRows, REMITTANCE_COUNTRIES, type DeliveryMethod } from "@/
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Card } from "@/components/ui/Card";
+import { EducationalDisclaimer } from "@/components/ui/EducationalDisclaimer";
 
 export function RemittanceClient() {
   const t = useTranslations("remittance");
@@ -120,6 +121,12 @@ export function RemittanceClient() {
       </Card>
 
       <Card>
+        <h2 className="text-lg font-semibold text-ink">{t("timingTitle")}</h2>
+        <p className="mt-3 whitespace-pre-line text-sm text-muted">{t("timingBody")}</p>
+        <p className="mt-4 text-xs text-faint">{t("timingNote")}</p>
+      </Card>
+
+      <Card>
         <h2 className="text-lg font-semibold text-ink">{t("tipsTitle")}</h2>
         <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-muted">
           <li>{t("tip1")}</li>
@@ -130,6 +137,18 @@ export function RemittanceClient() {
           <li>{t("tip6")}</li>
         </ul>
       </Card>
+
+      <details className="details-disclosure group rounded-control border border-border bg-surface">
+        <summary className="cursor-pointer p-4 font-semibold text-ink">
+          {t("recurringTitle")}
+        </summary>
+        <div className="border-t border-border p-4">
+          <p className="whitespace-pre-line text-sm text-muted">{t("recurringBody")}</p>
+          <p className="mt-4 text-xs text-faint">{t("recurringNote")}</p>
+        </div>
+      </details>
+
+      <EducationalDisclaimer topic="remittance" />
     </div>
   );
 }

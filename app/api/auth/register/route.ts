@@ -2,12 +2,13 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { jsonWithSessionCookie } from "@/lib/auth";
 import { createServiceClient, isSupabaseConfigured } from "@/lib/db";
+import { getClientIp } from "@/lib/client-ip";
 import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { sanitizeString } from "@/lib/sanitize";
 import { RegisterSchema } from "@/lib/validation";
 
 export async function POST(request: Request) {
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const ip = getClientIp(request);
   const { success } = rateLimit(`auth:${ip}`, RATE_LIMITS.auth);
   if (!success) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
@@ -70,7 +71,7 @@ export async function POST(request: Request) {
     console.error("[auth/register] insert:", error);
     return NextResponse.json(
       {
-        error: error?.message ?? "Database error",
+        error: "Could not create account. Try again later.",
         code: "DATABASE_ERROR",
       },
       { status: 503 }

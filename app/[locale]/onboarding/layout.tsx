@@ -12,7 +12,9 @@ export default function OnboardingLayout({
     <div className="relative min-h-screen">
       <AnimatedBackground />
       <LandingNav locale={params.locale} />
-      <main className="relative z-0 mx-auto max-w-4xl px-4 py-10 md:px-8 md:py-14">{children}</main>
+      <main className="relative z-0 mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+        {children}
+      </main>
     </div>
   );
 }

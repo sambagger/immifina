@@ -103,11 +103,11 @@ export function RegisterForm() {
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <h1 className="font-display text-2xl text-ink">{t("registerTitle")}</h1>
+    <Card variant="glass" className="w-full max-w-md rounded-2xl p-6 md:p-8">
+      <h1 className="font-display text-3xl leading-tight text-landing-title md:text-4xl">{t("registerTitle")}</h1>
       <form className="mt-8 space-y-4" onSubmit={onSubmit} noValidate>
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-ink">
+          <label htmlFor="name" className="block text-sm font-medium text-landing-body">
             {t("name")}
           </label>
           <Input
@@ -117,17 +117,18 @@ export function RegisterForm() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="mt-1"
+            variant="onDark"
             aria-invalid={Boolean(fieldErrors.name)}
             aria-describedby={fieldErrors.name ? "err-name" : undefined}
           />
           {fieldErrors.name ? (
-            <p id="err-name" className="mt-1 text-sm text-red" role="alert">
+            <p id="err-name" className="mt-1 text-sm text-red-300" role="alert">
               {fieldErrors.name}
             </p>
           ) : null}
         </div>
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-ink">
+          <label htmlFor="email" className="block text-sm font-medium text-landing-body">
             {t("email")}
           </label>
           <Input
@@ -138,17 +139,18 @@ export function RegisterForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="mt-1"
+            variant="onDark"
             aria-invalid={Boolean(fieldErrors.email)}
             aria-describedby={fieldErrors.email ? "err-email" : undefined}
           />
           {fieldErrors.email ? (
-            <p id="err-email" className="mt-1 text-sm text-red" role="alert">
+            <p id="err-email" className="mt-1 text-sm text-red-300" role="alert">
               {fieldErrors.email}
             </p>
           ) : null}
         </div>
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-ink">
+          <label htmlFor="password" className="block text-sm font-medium text-landing-body">
             {t("password")}
           </label>
           <Input
@@ -159,20 +161,21 @@ export function RegisterForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="mt-1"
+            variant="onDark"
             aria-invalid={Boolean(fieldErrors.password)}
             aria-describedby="password-hint err-password"
           />
-          <p id="password-hint" className="mt-1 text-xs text-muted">
+          <p id="password-hint" className="mt-1 text-xs text-zinc-400">
             {t("passwordRules")}
           </p>
           {fieldErrors.password ? (
-            <p id="err-password" className="mt-1 text-sm text-red" role="alert">
+            <p id="err-password" className="mt-1 text-sm text-red-300" role="alert">
               {fieldErrors.password}
             </p>
           ) : null}
         </div>
         <div>
-          <label htmlFor="confirmPassword" className="block text-sm font-medium text-ink">
+          <label htmlFor="confirmPassword" className="block text-sm font-medium text-landing-body">
             {t("confirmPassword")}
           </label>
           <Input
@@ -183,17 +186,18 @@ export function RegisterForm() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="mt-1"
+            variant="onDark"
             aria-invalid={Boolean(fieldErrors.confirmPassword)}
             aria-describedby={fieldErrors.confirmPassword ? "err-confirm" : undefined}
           />
           {fieldErrors.confirmPassword ? (
-            <p id="err-confirm" className="mt-1 text-sm text-red" role="alert">
+            <p id="err-confirm" className="mt-1 text-sm text-red-300" role="alert">
               {fieldErrors.confirmPassword}
             </p>
           ) : null}
         </div>
         <div>
-          <label htmlFor="preferredLanguage" className="block text-sm font-medium text-ink">
+          <label htmlFor="preferredLanguage" className="block text-sm font-medium text-landing-body">
             {t("preferredLanguage")}
           </label>
           <Select
@@ -202,6 +206,7 @@ export function RegisterForm() {
             value={preferredLanguage}
             onChange={(e) => setPreferredLanguage(e.target.value as "en" | "es" | "zh")}
             className="mt-1"
+            variant="onDark"
           >
             <option value="en">English</option>
             <option value="es">Español</option>
@@ -209,47 +214,54 @@ export function RegisterForm() {
           </Select>
         </div>
         {error ? (
-          <p className="text-sm text-red" role="alert">
+          <p className="text-sm text-red-300" role="alert">
             {error}
           </p>
         ) : null}
-        <p className="text-xs leading-relaxed text-muted">
+        <p className="text-xs leading-relaxed text-zinc-400">
           {t.rich("agreeToTerms", {
             terms: (chunks) => (
-              <Link href="/terms" className="text-accent underline-offset-2 hover:underline">
+              <Link href="/terms" className="text-landing-title underline-offset-2 hover:text-white">
                 {chunks}
               </Link>
             ),
             privacy: (chunks) => (
-              <Link href="/privacy" className="text-accent underline-offset-2 hover:underline">
+              <Link href="/privacy" className="text-landing-title underline-offset-2 hover:text-white">
                 {chunks}
               </Link>
             ),
           })}
         </p>
-        <Button type="submit" className="w-full" disabled={loading}>
+        <Button
+          type="submit"
+          className="w-full rounded-full border border-white/25 py-3.5 text-sm font-semibold shadow-[0_4px_24px_rgba(0,0,0,0.45)]"
+          disabled={loading}
+        >
           {loading ? "…" : t("submitRegister")}
         </Button>
       </form>
-      <p className="mt-6 text-center text-sm text-muted">
-        <Link href="/login" className="text-accent underline-offset-2 hover:underline">
+      <p className="mt-6 text-center text-sm text-zinc-300">
+        <Link
+          href="/login"
+          className="font-medium text-landing-title underline-offset-2 transition-colors hover:text-white"
+        >
           {tNav("login")}
         </Link>
       </p>
-      <div className="mt-6 space-y-3 border-t border-border pt-4">
-        <p className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-center text-xs text-muted">
-          <Link href="/terms" className="hover:text-ink">
+      <div className="mt-6 space-y-3 border-t border-white/10 pt-4">
+        <p className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-center text-xs text-zinc-400">
+          <Link href="/terms" className="transition-colors hover:text-white">
             {tCommon("termsOfService")}
           </Link>
-          <span aria-hidden className="text-border-strong">
+          <span aria-hidden className="text-zinc-600">
             ·
           </span>
-          <Link href="/privacy" className="hover:text-ink">
+          <Link href="/privacy" className="transition-colors hover:text-white">
             {tCommon("privacyPolicy")}
           </Link>
         </p>
-        <LegalFooter />
-        <p className="text-center text-xs text-muted">{tCommon("copyright")}</p>
+        <LegalFooter variant="onDark" />
+        <p className="text-center text-xs text-zinc-500">{tCommon("copyright")}</p>
       </div>
     </Card>
   );

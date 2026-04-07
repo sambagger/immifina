@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import "./globals.css";
 
@@ -10,20 +10,43 @@ import "./globals.css";
  */
 const HTML_LANG = routing.defaultLocale;
 
-const poppins = Poppins({
+const inter = Inter({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-poppins",
+  variable: "--font-inter",
   display: "swap",
   weight: ["400", "500", "600", "700"],
 });
 
+/** Headings & display — Playfair Display; body is Inter. */
+const playfair = Playfair_Display({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-playfair",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800", "900"],
+});
+
+const SITE_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "https://immifina.org").replace(
+  /\/$/,
+  ""
+);
+
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL ?? "https://immifina.org"
-  ),
+  metadataBase: new URL(SITE_URL),
   title: "ImmiFina — Your financial future, in plain language",
   description:
     "Understand your money and what to do next — for immigrants and first-generation Americans navigating the U.S. financial system.",
+  icons: { icon: "/brand-mark.png" },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: "ImmiFina",
+    title: "ImmiFina — Your financial future, in plain language",
+    description:
+      "Understand your money and what to do next — for immigrants and first-generation Americans navigating the U.S. financial system.",
+  },
+  alternates: {
+    canonical: SITE_URL,
+  },
 };
 
 export default function RootLayout({
@@ -33,7 +56,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang={HTML_LANG}>
-      <body className={`${poppins.variable} min-h-screen font-sans antialiased`}>
+      <body
+        className={`${inter.variable} ${playfair.variable} min-h-screen font-sans antialiased`}
+      >
         {children}
       </body>
     </html>

@@ -14,18 +14,18 @@ export async function GET() {
 
   const ok = authSecretConfigured && supabaseConfigured;
 
-  return NextResponse.json(
-    {
-      ok,
-      checks: {
-        authSecretConfigured,
-        supabaseConfigured,
-      },
-      nodeEnv: process.env.NODE_ENV,
-      vercel: process.env.VERCEL === "1",
-      /** Hostname Vercel assigns (no secrets). */
-      vercelUrl: process.env.VERCEL_URL ?? null,
+  const payload: Record<string, unknown> = {
+    ok,
+    checks: {
+      authSecretConfigured,
+      supabaseConfigured,
     },
-    { status: ok ? 200 : 503 }
-  );
+  };
+  if (process.env.NODE_ENV !== "production") {
+    payload.nodeEnv = process.env.NODE_ENV;
+    payload.vercel = process.env.VERCEL === "1";
+    payload.vercelUrl = process.env.VERCEL_URL ?? null;
+  }
+
+  return NextResponse.json(payload, { status: ok ? 200 : 503 });
 }
