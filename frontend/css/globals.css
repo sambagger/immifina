@@ -1,0 +1,361 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: #02060f;
+  --color-surface: #070f1d;
+  --color-border: #142030;
+  --color-border-strong: #1e3550;
+  /* Primary copy — white on dark */
+  --color-text-primary: #e8f0ea;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  --color-accent: #5ed4a8;
+  --color-accent-light: #071a12;
+  --color-accent-text: #5ed4a8;
+  --color-blue: #60a5fa;
+  --color-blue-light: #071428;
+  --color-amber: #fbbf24;
+  --color-amber-light: #1a1000;
+  --color-red: #f87171;
+  --color-red-light: #1a0404;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+/* Headings & brand — Archivo Black */
+.font-display {
+  font-family: var(--font-archivo-black), system-ui, sans-serif;
+  font-weight: 400; /* Archivo Black has a single weight — 400 is the black face */
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.font-figures {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Entrance animations ─────────────────────────────────────────────────── */
+
+@keyframes slide-up-fade {
+  from {
+    opacity: 0;
+    transform: translateY(1.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes pill-glow {
+  0%, 100% { border-color: rgba(52, 211, 153, 0.3); box-shadow: none; }
+  50%       { border-color: rgba(52, 211, 153, 0.65); box-shadow: 0 0 14px rgba(52, 211, 153, 0.18); }
+}
+
+@keyframes number-breathe {
+  0%, 100% { opacity: 0.18; }
+  50%       { opacity: 0.32; }
+}
+
+.animate-slide-up {
+  animation: slide-up-fade 0.72s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-fade-in {
+  animation: fade-in 0.6s ease both;
+}
+.animate-float {
+  animation: float 5.5s ease-in-out infinite;
+}
+.animate-pill-glow {
+  animation: pill-glow 3s ease-in-out infinite;
+}
+.animate-number-breathe {
+  animation: number-breathe 3.5s ease-in-out infinite;
+}
+
+/* Stagger delay helpers */
+.stagger-1 { animation-delay: 80ms; }
+.stagger-2 { animation-delay: 180ms; }
+.stagger-3 { animation-delay: 280ms; }
+.stagger-4 { animation-delay: 380ms; }
+.stagger-5 { animation-delay: 480ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-slide-up,
+  .animate-fade-in,
+  .animate-float,
+  .animate-pill-glow,
+  .animate-number-breathe {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ─── Scroll-triggered fade / slide (used with ScrollReveal) ─────────────── */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(1.25rem);
+  transition:
+    opacity 0.65s ease-out,
+    transform 0.65s ease-out;
+}
+
+.scroll-reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal,
+  .scroll-reveal-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Drift animations — 30–60s cycles, transform + opacity only */
+@keyframes drift-1 {
+  0% {
+    transform: translate(0px, 0px) rotate(0deg);
+    opacity: 0.06;
+  }
+  33% {
+    transform: translate(30px, -20px) rotate(120deg);
+    opacity: 0.04;
+  }
+  66% {
+    transform: translate(-15px, 25px) rotate(240deg);
+    opacity: 0.07;
+  }
+  100% {
+    transform: translate(0px, 0px) rotate(360deg);
+    opacity: 0.06;
+  }
+}
+
+@keyframes drift-2 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.05;
+  }
+  50% {
+    transform: translate(-25px, 18px) rotate(180deg);
+    opacity: 0.07;
+  }
+  100% {
+    transform: translate(12px, -10px) rotate(360deg);
+    opacity: 0.05;
+  }
+}
+
+@keyframes drift-3 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 0.04;
+  }
+  40% {
+    transform: translate(20px, 30px) scale(1.05) rotate(144deg);
+    opacity: 0.06;
+  }
+  100% {
+    transform: translate(-18px, -12px) scale(1) rotate(360deg);
+    opacity: 0.04;
+  }
+}
+
+@keyframes drift-4 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.07;
+  }
+  25% {
+    transform: translate(-22px, -15px) rotate(90deg);
+    opacity: 0.04;
+  }
+  75% {
+    transform: translate(28px, 8px) rotate(270deg);
+    opacity: 0.06;
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+    opacity: 0.07;
+  }
+}
+
+@keyframes drift-5 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.045;
+  }
+  50% {
+    transform: translate(15px, -28px) rotate(-180deg);
+    opacity: 0.065;
+  }
+  100% {
+    transform: translate(-10px, 20px) rotate(-360deg);
+    opacity: 0.045;
+  }
+}
+
+@keyframes drift-6 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.055;
+  }
+  33% {
+    transform: translate(-30px, 10px) rotate(200deg);
+    opacity: 0.04;
+  }
+  100% {
+    transform: translate(8px, -22px) rotate(400deg);
+    opacity: 0.055;
+  }
+}
+
+@keyframes drift-7 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.05;
+  }
+  66% {
+    transform: translate(24px, 22px) rotate(240deg);
+    opacity: 0.065;
+  }
+  100% {
+    transform: translate(-14px, -8px) rotate(360deg);
+    opacity: 0.05;
+  }
+}
+
+@keyframes drift-8 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.045;
+  }
+  50% {
+    transform: translate(-12px, 26px) rotate(180deg);
+    opacity: 0.055;
+  }
+  100% {
+    transform: translate(18px, -14px) rotate(360deg);
+    opacity: 0.045;
+  }
+}
+
+.drift-1 {
+  animation: drift-1 52s ease-in-out infinite;
+}
+.drift-2 {
+  animation: drift-2 38s ease-in-out infinite;
+}
+.drift-3 {
+  animation: drift-3 60s ease-in-out infinite;
+}
+.drift-4 {
+  animation: drift-4 44s ease-in-out infinite;
+}
+.drift-5 {
+  animation: drift-5 48s ease-in-out infinite;
+}
+.drift-6 {
+  animation: drift-6 56s ease-in-out infinite;
+}
+.drift-7 {
+  animation: drift-7 42s ease-in-out infinite;
+}
+.drift-8 {
+  animation: drift-8 50s ease-in-out infinite;
+}
+
+@layer components {
+  /**
+   * Expandable <details> — trailing chevron (closed → right, open → down).
+   * Add class `details-disclosure` on <details>; keep summary as flex content + ::after chevron.
+   */
+  details.details-disclosure > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    list-style: none;
+  }
+
+  details.details-disclosure > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details.details-disclosure > summary::marker {
+    content: "";
+  }
+
+  details.details-disclosure > summary::after {
+    content: "";
+    flex-shrink: 0;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-style: solid;
+    border-width: 0 2px 2px 0;
+    border-color: currentColor;
+    opacity: 0.5;
+    transform: rotate(-45deg);
+    transition: transform 0.2s ease;
+  }
+
+  details.details-disclosure[open] > summary::after {
+    transform: rotate(45deg);
+  }
+
+  /**
+   * Summary has two DOM children + ::after chevron: [main] [trailing label] [arrow].
+   * Without this, a single inner wrapper makes the arrow sit after the whole block and
+   * the trailing label’s horizontal position shifts per row.
+   */
+  details.details-disclosure.details-disclosure--summary-trailing > summary {
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  details.details-disclosure.details-disclosure--summary-trailing > summary::after {
+    margin-top: 0.2rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    details.details-disclosure > summary::after {
+      transition: none;
+    }
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .focus-ring {
+    @apply outline-none ring-2 ring-[var(--color-accent)] ring-offset-2 ring-offset-[var(--color-bg)];
+  }
+}
