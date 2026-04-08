@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Link } from "@/navigation";
@@ -10,7 +10,16 @@ import { Card } from "@/components/ui/Card";
 import { LegalFooter } from "@/components/LegalFooter";
 import { apiFetch } from "@/lib/api";
 
-export default function ResetPasswordPage() {
+function ResetPasswordFallback() {
+  const tc = useTranslations("common");
+  return (
+    <Card variant="glass" className="w-full max-w-md rounded-2xl p-6 md:p-8">
+      <p className="text-sm text-zinc-400">{tc("loading")}</p>
+    </Card>
+  );
+}
+
+function ResetPasswordForm() {
   const t = useTranslations("auth");
   const tc = useTranslations("common");
   const searchParams = useSearchParams();
@@ -42,7 +51,7 @@ export default function ResetPasswordPage() {
         body: JSON.stringify({ token, password }),
       });
       if (!res.ok) {
-        const data = await res.json().catch(() => ({})) as { code?: string };
+        const data = (await res.json().catch(() => ({}))) as { code?: string };
         if (data.code === "INVALID_TOKEN" || data.code === "TOKEN_EXPIRED") {
           setError(t("resetPasswordInvalidToken"));
         } else if (data.code === "VALIDATION_FAILED") {
@@ -124,7 +133,9 @@ export default function ResetPasswordPage() {
           </div>
           {error ? (
             <div className="flex items-start gap-2 rounded-control border border-red-500/30 bg-red-500/10 px-3 py-2.5" role="alert">
-              <span className="mt-px text-red-400" aria-hidden>✕</span>
+              <span className="mt-px text-red-400" aria-hidden>
+                ✕
+              </span>
               <p className="text-sm font-medium text-red-400">{error}</p>
             </div>
           ) : null}
@@ -143,5 +154,13 @@ export default function ResetPasswordPage() {
         <p className="text-center text-xs text-zinc-500">{tc("copyright")}</p>
       </div>
     </Card>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<ResetPasswordFallback />}>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }
