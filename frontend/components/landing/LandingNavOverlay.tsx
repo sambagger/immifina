@@ -70,6 +70,12 @@ export function LandingNavOverlay() {
             {tl("navTestimonials")}
           </a>
           <a
+            href="#guides"
+            className="rounded-sm text-sm font-medium text-zinc-200 transition-colors hover:text-white focus-visible:focus-ring"
+          >
+            Guides
+          </a>
+          <a
             href="#feedback"
             className="rounded-sm text-sm font-medium text-zinc-200 transition-colors hover:text-white focus-visible:focus-ring"
           >

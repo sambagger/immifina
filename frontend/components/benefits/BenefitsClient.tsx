@@ -77,7 +77,7 @@ export function BenefitsClient() {
         <p className="mt-2 text-sm text-muted">{t("privacyLead")}</p>
       </div>
 
-      <Card className="border-emerald-600/25 bg-emerald-500/5">
+      <Card className="border-teal-600/25 bg-teal-500/5">
         <h2 className="text-lg font-semibold text-ink">{t("reassuranceTitle")}</h2>
         <p className="mt-3 text-sm text-muted">{t("reassuranceBody")}</p>
       </Card>
@@ -309,7 +309,7 @@ export function BenefitsClient() {
         <ul className="space-y-4">
           {earnedIncome && eitcMax != null ? (
             <li>
-              <Card className="border-2 border-emerald-600/50 bg-emerald-500/5 p-6 md:p-8">
+              <Card className="border-2 border-teal-600/50 bg-teal-500/5 p-6 md:p-8">
                 <p className="text-2xl" aria-hidden>
                   💰
                 </p>

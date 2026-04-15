@@ -33,6 +33,7 @@ export function ChatClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const conversationParam = searchParams.get("conversation") ?? "";
+  const preloadedQuestion = searchParams.get("q") ?? "";
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [conversationId, setConversationId] = useState<string | undefined>();
@@ -118,6 +119,20 @@ export function ChatClient() {
     })();
     return () => { cancelled = true; };
   }, [loadMessages, conversationParam]);
+
+  // Auto-send pre-loaded question from ?q= URL param (e.g., from Journey card "Ask ImmiFina")
+  const hasSentPreload = useRef(false);
+  useEffect(() => {
+    if (!preloadedQuestion || hasSentPreload.current || listLoading) return;
+    hasSentPreload.current = true;
+    // Start a fresh conversation
+    setMessages([]);
+    setConversationId(undefined);
+    // Small delay so the UI renders the blank state first
+    const t = setTimeout(() => send(preloadedQuestion), 200);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preloadedQuestion, listLoading]);
 
   async function send(text?: string) {
     const msg = (text ?? input).trim();
@@ -215,7 +230,7 @@ export function ChatClient() {
                       onClick={() => selectConversation(c.id)}
                       className={`w-full rounded-lg px-2.5 py-2 text-left text-sm transition-colors ${
                         active
-                          ? "bg-emerald-950/60 font-medium text-landing-title"
+                          ? "bg-teal-950/60 font-medium text-landing-title"
                           : "text-zinc-400 hover:bg-white/5 hover:text-white"
                       }`}
                       aria-current={active ? "true" : undefined}
@@ -262,7 +277,7 @@ export function ChatClient() {
                       key={prompt}
                       type="button"
                       onClick={() => { setInput(prompt); inputRef.current?.focus(); }}
-                      className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-left text-xs leading-snug text-zinc-400 transition-colors hover:border-emerald-500/30 hover:bg-emerald-950/40 hover:text-zinc-200"
+                      className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-left text-xs leading-snug text-zinc-400 transition-colors hover:border-teal-500/30 hover:bg-teal-950/40 hover:text-zinc-200"
                     >
                       {prompt}
                     </button>
@@ -278,7 +293,7 @@ export function ChatClient() {
                   <div
                     className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                       m.role === "user"
-                        ? "rounded-br-sm bg-emerald-900/70 text-white"
+                        ? "rounded-br-sm bg-teal-900/70 text-white"
                         : "rounded-bl-sm border border-white/10 bg-white/[0.06] text-zinc-200"
                     }`}
                   >
@@ -334,7 +349,7 @@ export function ChatClient() {
                 rows={1}
                 maxLength={2000}
                 disabled={messagesLoading}
-                className="min-h-[44px] flex-1 resize-none rounded-xl border border-white/15 bg-white/[0.06] px-3 py-2.5 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 disabled:opacity-50"
+                className="min-h-[44px] flex-1 resize-none rounded-xl border border-white/15 bg-white/[0.06] px-3 py-2.5 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-teal-500/50 disabled:opacity-50"
                 style={{ maxHeight: "160px" }}
               />
               <button

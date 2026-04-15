@@ -36,12 +36,12 @@ export function LandingHowPanel({
             )}
 
             {/* Step number */}
-            <span className="animate-number-breathe font-figures block text-[3.5rem] font-bold leading-none tabular-nums text-emerald-500 md:text-[4rem]">
+            <span className="animate-number-breathe font-figures block text-[3.5rem] font-bold leading-none tabular-nums text-teal-500 md:text-[4rem]">
               {String(i + 1).padStart(2, "0")}
             </span>
 
             {/* Divider under number */}
-            <div className="mt-4 h-px w-8 bg-emerald-500/40" aria-hidden />
+            <div className="mt-4 h-px w-8 bg-teal-500/40" aria-hidden />
 
             {/* Content */}
             <h3 className="font-display mt-5 text-lg font-semibold text-landing-title md:text-xl">

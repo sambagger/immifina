@@ -250,5 +250,56 @@ export async function PATCH(request: Request) {
     }
   }
 
+  // Auto-bootstrap a goal from primary_goal when onboarding completes
+  if (d.completeOnboarding === true && d.primaryGoal) {
+    try {
+      const goalType = d.primaryGoal;
+      const VALID_GOAL_TYPES = [
+        "build_credit",
+        "bank_account",
+        "save_plan",
+        "remittance",
+        "taxes",
+        "home",
+        "business",
+      ];
+      if (VALID_GOAL_TYPES.includes(goalType)) {
+        // Only create if user has no active goal yet
+        const { data: existingGoal } = await supabase
+          .from("user_goals")
+          .select("id")
+          .eq("user_id", session.userId)
+          .eq("status", "active")
+          .maybeSingle();
+
+        if (!existingGoal) {
+          const { data: existingType } = await supabase
+            .from("user_goals")
+            .select("id")
+            .eq("user_id", session.userId)
+            .eq("goal_type", goalType)
+            .maybeSingle();
+
+          if (existingType) {
+            await supabase
+              .from("user_goals")
+              .update({ status: "active", started_at: new Date().toISOString(), completed_at: null })
+              .eq("id", existingType.id);
+          } else {
+            await supabase.from("user_goals").insert({
+              user_id: session.userId,
+              goal_type: goalType,
+              status: "active",
+              current_step: 0,
+            });
+          }
+        }
+      }
+    } catch (goalErr) {
+      // Non-fatal: goal bootstrap failed but onboarding still succeeded
+      console.warn("[api/profile] goal bootstrap failed:", goalErr);
+    }
+  }
+
   return NextResponse.json({ success: true });
 }

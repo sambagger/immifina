@@ -36,7 +36,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
               <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
                 {/* Copy — left-aligned on desktop, centered on mobile */}
                 <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-                  <span className="animate-slide-up animate-pill-glow stagger-1 inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-950/70 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-300">
+                  <span className="animate-slide-up animate-pill-glow stagger-1 inline-flex items-center rounded-full border border-teal-500/30 bg-teal-950/70 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-teal-300">
                     {t("heroTagline")}
                   </span>
                   <h1 className="font-display mt-6 text-[clamp(2.4rem,4.6vw,4rem)] leading-[1.03]">
@@ -133,7 +133,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
                 {t("testimonialsTitle")}
               </h2>
               <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-8">
-                <blockquote className="flex flex-col gap-5 border-l-2 border-emerald-500/50 pl-6">
+                <blockquote className="flex flex-col gap-5 border-l-2 border-teal-500/50 pl-6">
                   <p className="text-xl font-light leading-relaxed text-landing-title">
                     &ldquo;{t("testimonial1Quote")}&rdquo;
                   </p>
@@ -144,7 +144,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
                     <p className="mt-0.5 text-xs text-zinc-400">{t("testimonial1Role")}</p>
                   </footer>
                 </blockquote>
-                <blockquote className="flex flex-col gap-5 border-l-2 border-emerald-500/50 pl-6 md:mt-10">
+                <blockquote className="flex flex-col gap-5 border-l-2 border-teal-500/50 pl-6 md:mt-10">
                   <p className="text-xl font-light leading-relaxed text-landing-title">
                     &ldquo;{t("testimonial2Quote")}&rdquo;
                   </p>
@@ -155,7 +155,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
                     <p className="mt-0.5 text-xs text-zinc-400">{t("testimonial2Role")}</p>
                   </footer>
                 </blockquote>
-                <blockquote className="flex flex-col gap-5 border-l-2 border-emerald-500/50 pl-6">
+                <blockquote className="flex flex-col gap-5 border-l-2 border-teal-500/50 pl-6">
                   <p className="text-xl font-light leading-relaxed text-landing-title">
                     &ldquo;{t("testimonial3Quote")}&rdquo;
                   </p>
@@ -186,6 +186,55 @@ export default async function HomePage({ params }: { params: { locale: string } 
                 <span className="rounded-full border border-white/25 bg-black/50 px-5 py-2.5 text-sm font-medium text-white shadow-soft backdrop-blur-md">
                   中文（简体）
                 </span>
+              </div>
+            </div>
+          </section>
+        </ScrollReveal>
+
+        {/* ── Guides section ──────────────────────────────── */}
+        <ScrollReveal>
+          <section id="guides" className={`scroll-mt-28 border-t border-white/10 ${sectionY}`}>
+            <div className={shell}>
+              <div className="flex flex-col items-center text-center gap-4">
+                <span className="inline-flex items-center rounded-full border border-teal-500/30 bg-teal-950/70 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-teal-300">
+                  Free Guides
+                </span>
+                <h2 className={sectionTitleCenter}>
+                  Everything you need to know about money in the U.S.
+                </h2>
+                <p className="max-w-xl text-lg leading-relaxed text-landing-body">
+                  Plain-language explanations of the U.S. financial system — no jargon, no assumptions. Read before you sign up.
+                </p>
+              </div>
+              <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {[
+                  { slug: "itin", icon: "🪪", title: "What Is an ITIN?", desc: "Who needs one, how to apply, and what doors it opens." },
+                  { slug: "secured-cards", icon: "💳", title: "How Secured Credit Cards Work", desc: "Build U.S. credit from scratch — even without an SSN." },
+                  { slug: "building-credit-no-ssn", icon: "📈", title: "Building Credit Without an SSN", desc: "Credit builder loans, authorized users, and ITIN cards." },
+                  { slug: "remittance-options", icon: "💸", title: "Sending Money Home for Less", desc: "How to compare providers and avoid hidden fees." },
+                  { slug: "vita-free-taxes", icon: "🧾", title: "File Your Taxes Free with VITA", desc: "Free IRS-sponsored tax help for immigrants and low-income filers." },
+                  { slug: "w2-explained", icon: "📄", title: "Your W-2 Explained", desc: "Every box on your W-2 in plain language." },
+                  { slug: "itin-banking", icon: "🏦", title: "Opening a Bank Account with an ITIN", desc: "Banks that accept ITIN holders and what you'll need." },
+                  { slug: "public-charge-rule", icon: "⚖️", title: "Public Charge Rule", desc: "Which benefits are safe to use and which aren't." },
+                  { slug: "paycheck-deductions", icon: "💰", title: "Understanding Your Paycheck", desc: "FICA, federal tax, and why your take-home is less than your salary." },
+                ].map((guide) => (
+                  <Link
+                    key={guide.slug}
+                    href={`/guides/${guide.slug}`}
+                    className="group flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-5 transition-all hover:border-teal-500/30 hover:bg-teal-950/20"
+                  >
+                    <span className="text-2xl" aria-hidden>{guide.icon}</span>
+                    <div>
+                      <p className="font-semibold text-white group-hover:text-teal-100 transition-colors">
+                        {guide.title}
+                      </p>
+                      <p className="mt-1 text-sm leading-snug text-zinc-400">{guide.desc}</p>
+                    </div>
+                    <span className="mt-auto text-xs text-teal-500/70 group-hover:text-teal-400 transition-colors">
+                      Read guide →
+                    </span>
+                  </Link>
+                ))}
               </div>
             </div>
           </section>

@@ -26,7 +26,7 @@ export default function GlobalError({ error }: { error: Error }) {
           <p className="text-sm text-zinc-400">Something went wrong.</p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-4 rounded-full bg-emerald-700 px-6 py-2 text-sm font-semibold text-white"
+            className="mt-4 rounded-full bg-teal-700 px-6 py-2 text-sm font-semibold text-white"
           >
             Reload
           </button>

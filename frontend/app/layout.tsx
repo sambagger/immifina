@@ -33,9 +33,24 @@ const SITE_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "https://immifina.org").rep
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "ImmiFina — Your financial future, in plain language",
+  title: {
+    default: "ImmiFina — Financial guidance for immigrants in the U.S.",
+    template: "%s | ImmiFina",
+  },
   description:
-    "Understand your money and what to do next — for immigrants and first-generation Americans navigating the U.S. financial system.",
+    "Free financial guidance for immigrants and first-generation Americans. Learn how to build credit without an SSN, open a bank account with an ITIN, file taxes for free, and send money home for less.",
+  keywords: [
+    "financial help for immigrants",
+    "build credit without SSN",
+    "ITIN bank account",
+    "how to get ITIN",
+    "free tax help immigrants",
+    "VITA free tax preparation",
+    "send money home cheaply",
+    "immigrant finance USA",
+    "financial guide immigrants",
+    "secured credit card no SSN",
+  ],
   icons: {
     icon: [
       { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
@@ -48,12 +63,51 @@ export const metadata: Metadata = {
     type: "website",
     url: SITE_URL,
     siteName: "ImmiFina",
-    title: "ImmiFina — Your financial future, in plain language",
+    title: "ImmiFina — Financial guidance for immigrants in the U.S.",
     description:
-      "Understand your money and what to do next — for immigrants and first-generation Americans navigating the U.S. financial system.",
+      "Free financial guidance for immigrants and first-generation Americans. Build credit, open a bank account, file taxes free, and send money home for less.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ImmiFina — Financial guidance for immigrants in the U.S.",
+    description:
+      "Free financial guidance for immigrants and first-generation Americans. Build credit, open a bank account, file taxes free, and send money home for less.",
   },
   alternates: {
     canonical: SITE_URL,
+  },
+};
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "ImmiFina",
+  url: SITE_URL,
+  logo: `${SITE_URL}/icon-512.png`,
+  description:
+    "Free financial guidance for immigrants and first-generation Americans living in the United States. Learn how to build credit without an SSN, open a bank account with an ITIN, file taxes for free with VITA, and send money home for less.",
+  foundingDate: "2024",
+  areaServed: "US",
+  audience: {
+    "@type": "Audience",
+    audienceType: "Immigrants, first-generation Americans, visa holders, green card holders",
+  },
+  sameAs: [
+    "https://twitter.com/immifina",
+    "https://www.linkedin.com/company/immifina",
+  ],
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "ImmiFina",
+  url: SITE_URL,
+  description: "Financial guidance for immigrants in the U.S.",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${SITE_URL}/guides?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
   },
 };
 
@@ -65,6 +119,14 @@ export default function RootLayout({
   return (
     <html lang={HTML_LANG}>
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
         {process.env.NEXT_PUBLIC_CF_BEACON_TOKEN ? (
           <script
             defer

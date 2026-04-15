@@ -5,6 +5,10 @@ import { createServiceClient, isSupabaseConfigured } from "@/lib/db";
 import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { sanitizeString } from "@/lib/sanitize";
 import { ChatMessageSchema } from "@/lib/validation";
+import { getKnowledgeContext } from "@/lib/rag";
+import { getWorkflow, getStepCount } from "@/lib/workflow-templates";
+import { getUserMemories, formatMemoriesBlock, extractAndSaveMemories } from "@/lib/memory";
+import { IMMIFINA_TOOLS, executeTool } from "@/lib/tools";
 
 const MODEL = "claude-sonnet-4-20250514";
 
@@ -22,22 +26,52 @@ function anthropicUserVisibleMessage(err: unknown): string {
 async function buildUserContext(userId: string): Promise<string> {
   if (!isSupabaseConfigured()) return "{}";
   const supabase = createServiceClient();
-  const { data: user } = await supabase
-    .from("users")
-    .select("name, preferred_language, immigration_status")
-    .eq("id", userId)
-    .maybeSingle();
-  const { data: profile } = await supabase
-    .from("financial_profiles")
-    .select("*")
-    .eq("user_id", userId)
-    .maybeSingle();
+
+  const [userRes, profileRes, goalRes] = await Promise.all([
+    supabase
+      .from("users")
+      .select("name, preferred_language, immigration_status")
+      .eq("id", userId)
+      .maybeSingle(),
+    supabase
+      .from("financial_profiles")
+      .select("*")
+      .eq("user_id", userId)
+      .maybeSingle(),
+    supabase
+      .from("user_goals")
+      .select("goal_type, status, current_step")
+      .eq("user_id", userId)
+      .eq("status", "active")
+      .order("started_at", { ascending: false })
+      .maybeSingle(),
+  ]);
+
+  const profile = profileRes.data;
   const income = Number(profile?.monthly_income ?? 0);
   const expenses = Number(profile?.monthly_expenses ?? 0);
   const surplus = income - expenses;
   const savings = Number(profile?.current_savings ?? 0);
+
+  // Include active goal context so Claude can give step-specific advice
+  let activeGoal: Record<string, unknown> | null = null;
+  if (goalRes.data) {
+    const g = goalRes.data;
+    const workflow = getWorkflow(g.goal_type);
+    const totalSteps = getStepCount(g.goal_type);
+    const currentStep = workflow?.steps[g.current_step];
+    activeGoal = {
+      type: g.goal_type,
+      label: workflow?.label ?? g.goal_type,
+      currentStepIndex: g.current_step,
+      totalSteps,
+      currentStepTitle: currentStep?.title ?? null,
+      stepsCompleted: g.current_step,
+    };
+  }
+
   return JSON.stringify({
-    user,
+    user: userRes.data,
     profile,
     derived: {
       monthlySurplus: surplus,
@@ -45,6 +79,7 @@ async function buildUserContext(userId: string): Promise<string> {
       monthlyExpenses: expenses,
       currentSavings: savings,
     },
+    activeGoal,
   });
 }
 
@@ -135,8 +170,16 @@ export async function POST(request: Request) {
     .order("created_at", { ascending: true })
     .limit(20);
 
-  const userContext = await buildUserContext(session.userId);
-  const systemPrompt = `You are ImmiFina's financial guide — knowledgeable, patient, and culturally sensitive. You help immigrants and first-generation Americans understand the U.S. financial system.
+  // Fetch user context, RAG knowledge, and memories in parallel
+  const [userContext, knowledgeContext, userMemories] = await Promise.all([
+    buildUserContext(session.userId),
+    getKnowledgeContext(message, { limit: 4, threshold: 0.68 }),
+    getUserMemories(session.userId),
+  ]);
+
+  const memoriesBlock = formatMemoriesBlock(userMemories);
+
+  const systemPrompt = `${knowledgeContext ? knowledgeContext + "\n\n" : ""}${memoriesBlock ? memoriesBlock + "\n\n" : ""}You are ImmiFina's financial guide — knowledgeable, patient, and culturally sensitive. You help immigrants and first-generation Americans understand the U.S. financial system.
 
 Communication style:
 - Plain language first; define any necessary jargon immediately.
@@ -176,7 +219,7 @@ Framing rules for all financial topics:
 Always end substantive answers about personal financial decisions with this closing (translate if the user is not writing in English):
 "This is educational guidance, not financial advice. For decisions specific to your situation, consider speaking with a financial counselor or advisor. Many community organizations offer free financial counseling."
 
-User profile JSON (use numbers and flags to personalize; if a field is missing, say you do not have it):
+User profile JSON (use numbers and flags to personalize; if a field is missing, say you do not have it). The "activeGoal" field shows the user's current guided journey — if they ask about their goal or current step, reference it:
 ${userContext}`;
 
   const history =
@@ -189,13 +232,58 @@ ${userContext}`;
 
   let reply: string;
   try {
-    const response = await client.messages.create({
+    // Build the message list — this grows as tools are called
+    const messages: Anthropic.MessageParam[] = [
+      ...history,
+      { role: "user", content: message },
+    ];
+
+    let response = await client.messages.create({
       model: MODEL,
       max_tokens: 1024,
       temperature: 0.7,
       system: systemPrompt,
-      messages: [...history, { role: "user", content: message }],
+      tools: IMMIFINA_TOOLS,
+      messages,
     });
+
+    // Agentic loop: keep running until Claude stops calling tools
+    let iterations = 0;
+    while (response.stop_reason === "tool_use" && iterations < 5) {
+      iterations++;
+
+      // Add Claude's tool_use response to the message history
+      messages.push({ role: "assistant", content: response.content });
+
+      // Execute each tool Claude requested
+      const toolResults: Anthropic.ToolResultBlockParam[] = [];
+      for (const block of response.content) {
+        if (block.type === "tool_use") {
+          const result = await executeTool(
+            block.name,
+            block.input as Record<string, unknown>,
+            { userId: session.userId }
+          );
+          toolResults.push({
+            type: "tool_result",
+            tool_use_id: block.id,
+            content: JSON.stringify(result),
+          });
+        }
+      }
+
+      // Feed results back to Claude
+      messages.push({ role: "user", content: toolResults });
+
+      response = await client.messages.create({
+        model: MODEL,
+        max_tokens: 1024,
+        temperature: 0.7,
+        system: systemPrompt,
+        tools: IMMIFINA_TOOLS,
+        messages,
+      });
+    }
 
     const block = response.content.find((b) => b.type === "text");
     reply = block && block.type === "text" ? block.text : "";
@@ -225,6 +313,16 @@ If you already added credits: billing applies per organization. Open console.ant
     { conversation_id: conversationId, role: "user", content: message },
     { conversation_id: conversationId, role: "assistant", content: reply },
   ]);
+
+  // Fire-and-forget: extract memories from this exchange (non-blocking)
+  void extractAndSaveMemories({
+    userId: session.userId,
+    conversationId: conversationId!,
+    userMessage: message,
+    assistantReply: reply,
+    existingMemories: userMemories,
+    apiKey,
+  });
 
   return NextResponse.json({ reply, conversationId });
 }

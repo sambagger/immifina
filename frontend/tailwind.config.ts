@@ -15,9 +15,21 @@ const config: Config = {
       colors: {
         /** Solid landing (video hero) — use instead of opacity text utilities */
         landing: {
-          /** Headlines on dark landing (video/sections) — lighter than accent for contrast */
-          title: "#5ed4a8",
+          title: "#4CAF82",
           body: "#ffffff",
+        },
+        // Override teal palette → ImmiFina forest green so dashboard teal-* classes match the landing page
+        teal: {
+          100: "#d1f0e4",
+          200: "#a8e6c7",
+          300: "#4CAF82",   // text / icons
+          400: "#2d8f65",   // progress bar, highlights
+          500: "#1d6b4f",   // primary buttons — matches landing page
+          600: "#185a42",   // hover state
+          700: "#11412f",
+          800: "#0a2d21",
+          900: "#061510",   // card backgrounds
+          950: "#030e09",   // darkest bg
         },
         bg: "var(--color-bg)",
         surface: "var(--color-surface)",

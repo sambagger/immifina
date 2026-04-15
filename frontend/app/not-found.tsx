@@ -6,7 +6,7 @@ export default function NotFound() {
     <>
       <LandingPageBackground />
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 text-center">
-        <p className="font-figures text-[8rem] font-bold leading-none tabular-nums text-emerald-500/20 md:text-[12rem]">
+        <p className="font-figures text-[8rem] font-bold leading-none tabular-nums text-teal-500/20 md:text-[12rem]">
           404
         </p>
         <h1 className="font-display -mt-4 text-3xl text-landing-title md:text-4xl">
