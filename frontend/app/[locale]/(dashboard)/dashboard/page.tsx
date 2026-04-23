@@ -87,9 +87,10 @@ export default async function DashboardPage({
   const locale = localeFromParam(params.locale);
   const t = await getTranslations({ locale, namespace: "dashboard" });
 
-  const [profileRes, goalRes] = await Promise.all([
+  const [profileRes, goalRes, gamificationRes] = await Promise.all([
     fetchWithSession("/api/profile"),
     fetchWithSession("/api/goals"),
+    fetchWithSession("/api/gamification"),
   ]);
 
   if (profileRes.status === 401) redirect("/login");
@@ -104,6 +105,18 @@ export default async function DashboardPage({
 
   const data = (await profileRes.json()) as ProfileResponse;
   const goalData = goalRes.ok ? ((await goalRes.json()) as GoalResponse) : null;
+  const gamification = gamificationRes.ok
+    ? ((await gamificationRes.json()) as {
+        xp: number;
+        level: number;
+        levelName: string;
+        progressPct: number;
+        progressXP: number;
+        nextLevelXP: number | null;
+        streak: number;
+        badges: { badge_id: string; earned_at: string }[];
+      })
+    : null;
 
   const p = data.profile;
   const income = Number(p?.monthly_income ?? 0);
@@ -196,6 +209,55 @@ export default async function DashboardPage({
           )}
         </div>
       </div>
+
+      {/* ── XP / Level bar ───────────────────────────────────── */}
+      {gamification && (gamification.xp > 0 || gamification.streak > 0) && (
+        <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="flex flex-col min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-medium text-zinc-400">{gamification.levelName}</span>
+                <span className="text-xs text-zinc-600">Lv.{gamification.level}</span>
+              </div>
+              <div className="mt-1 flex items-center gap-2">
+                <div className="h-1.5 w-32 overflow-hidden rounded-full bg-white/10">
+                  <div
+                    className="h-full rounded-full bg-teal-400 transition-all duration-500"
+                    style={{ width: `${gamification.progressPct}%` }}
+                  />
+                </div>
+                <span className="text-xs text-zinc-500 font-figures">
+                  {gamification.xp} XP
+                  {gamification.nextLevelXP && ` / ${gamification.nextLevelXP}`}
+                </span>
+              </div>
+            </div>
+          </div>
+          {gamification.streak >= 2 && (
+            <div className="flex items-center gap-1.5 ml-auto shrink-0">
+              <div className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+              <span className="text-xs text-zinc-400">{gamification.streak}-day streak</span>
+            </div>
+          )}
+          {gamification.badges.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 ml-auto shrink-0">
+              {gamification.badges.slice(0, 4).map((b) => (
+                <span
+                  key={b.badge_id}
+                  className="rounded-full border border-white/10 bg-white/[0.05] px-2 py-0.5 text-xs text-zinc-400"
+                >
+                  {b.badge_id.replace(/_/g, " ")}
+                </span>
+              ))}
+              {gamification.badges.length > 4 && (
+                <span className="rounded-full border border-white/10 bg-white/[0.05] px-2 py-0.5 text-xs text-zinc-500">
+                  +{gamification.badges.length - 4} more
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* ── Journey card ─────────────────────────────────────── */}
       {adjustedGoal ? (

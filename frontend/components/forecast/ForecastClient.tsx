@@ -21,6 +21,127 @@ import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
 import { apiFetch } from "@/lib/api";
 
+type GoalMilestoneCardProps = {
+  goalType: string;
+  currentSavings: number;
+  effectiveSave: number;
+  totalExpenses: number;
+  emergencyTarget: number;
+  emergencyMonths: number | null;
+  down10: number;
+  downMonths: number | null;
+};
+
+function GoalMilestoneCard({
+  goalType,
+  currentSavings,
+  effectiveSave,
+  totalExpenses,
+  emergencyTarget,
+  emergencyMonths,
+  down10,
+  downMonths,
+}: GoalMilestoneCardProps) {
+  const goalMilestones: Record<string, { heading: string; items: string[] }> = {
+    build_credit: {
+      heading: "Credit-Building Milestones",
+      items: [
+        "With on-time payments on a secured card, most immigrants see their first credit score in 3–6 months.",
+        "A score of 650+ is typically achievable within 12–18 months of responsible use.",
+        `An emergency fund of $${Math.round(totalExpenses).toLocaleString()} (1 month expenses) protects your credit — missed bills are the fastest way to damage a score.`,
+        emergencyMonths !== null
+          ? `At your current savings rate, you can build that safety net in ${emergencyMonths} months.`
+          : "Set a monthly savings amount above to see how fast you can build your safety net.",
+      ],
+    },
+    save_plan: {
+      heading: "Savings Goal Milestones",
+      items: [
+        `Emergency fund target (3 months expenses): $${Math.round(emergencyTarget).toLocaleString()}`,
+        emergencyMonths !== null
+          ? `At $${effectiveSave.toLocaleString()}/mo you reach it in ${emergencyMonths} months.`
+          : "Set a monthly savings amount to see your timeline.",
+        "High-yield savings accounts (HYSA) earn 4–5% APY — your money grows while you sleep.",
+        currentSavings >= emergencyTarget
+          ? "You've already hit your emergency fund target. Consider investing the surplus."
+          : `You're $${Math.round(emergencyTarget - currentSavings).toLocaleString()} away from your emergency fund goal.`,
+      ],
+    },
+    home: {
+      heading: "Home Purchase Milestones",
+      items: [
+        `10% down payment target: $${Math.round(down10).toLocaleString()}`,
+        downMonths !== null
+          ? `At your current savings rate, you reach that in ${Math.round((downMonths / 12) * 10) / 10} years.`
+          : "Set a monthly savings amount to see your down payment timeline.",
+        "FHA loans allow 3.5% down for qualified buyers — your target could be lower.",
+        "Closing costs typically add another 2–5% of the purchase price on top of the down payment.",
+      ],
+    },
+    remittance: {
+      heading: "Remittance Savings Milestones",
+      items: [
+        "Switching from a bank wire to a dedicated app (Wise, Remitly) typically saves 3–7% per transfer.",
+        effectiveSave > 0
+          ? `At $${effectiveSave.toLocaleString()}/mo in savings, you could build a $${(effectiveSave * 3).toLocaleString()} remittance buffer in 3 months — letting you send larger amounts less often (lower per-transfer fees).`
+          : "Saving a buffer lets you send larger amounts less often, reducing per-transfer fees.",
+        "Some providers offer first-transfer-free promotions — worth checking before each large transfer.",
+      ],
+    },
+    bank_account: {
+      heading: "Banking Setup Milestones",
+      items: [
+        `An initial deposit buffer of $${Math.min(500, Math.round(totalExpenses * 0.25)).toLocaleString()} helps avoid overdraft fees in your first months.`,
+        emergencyMonths !== null
+          ? `With your current savings rate, you can build a 1-month expense buffer in ${emergencyMonths} months.`
+          : "Set a monthly savings target to see how quickly you can build your buffer.",
+        "Many immigrant-friendly banks (Chime, SoFi, Alliant) have no minimum balance requirements.",
+      ],
+    },
+    taxes: {
+      heading: "Tax Planning Milestones",
+      items: [
+        "VITA (Volunteer Income Tax Assistance) prepares taxes for free for incomes under $67,000.",
+        effectiveSave > 0
+          ? `Setting aside $${Math.round(effectiveSave * 0.1).toLocaleString()}/mo (~10% of your monthly savings) as a tax reserve prevents surprises in April.`
+          : "Setting aside 10% of any side income as a tax reserve prevents surprises in April.",
+        "Contributing to a pre-tax 401(k) reduces your taxable income and grows your retirement savings simultaneously.",
+      ],
+    },
+    business: {
+      heading: "Business Launch Milestones",
+      items: [
+        `A 3–6 month operating reserve is standard. At your savings rate, that's approximately $${Math.round(totalExpenses * 3).toLocaleString()}–$${Math.round(totalExpenses * 6).toLocaleString()}.`,
+        effectiveSave > 0 && totalExpenses > 0
+          ? `You could reach a 3-month reserve in ~${Math.max(1, Math.round((totalExpenses * 3 - currentSavings) / effectiveSave))} months.`
+          : "Set your monthly savings target to see your runway timeline.",
+        "Business formation costs (LLC filing): $50–$500 depending on state. Many states have fee waivers for low-income applicants.",
+      ],
+    },
+  };
+
+  const milestone = goalMilestones[goalType];
+  if (!milestone) return null;
+
+  return (
+    <Card className="border-teal-500/25 bg-teal-950/15">
+      <div className="flex items-center gap-2">
+        <div className="h-1.5 w-1.5 rounded-full bg-teal-400" />
+        <p className="text-xs font-medium uppercase tracking-wider text-teal-400/80">Your Goal</p>
+      </div>
+      <h2 className="mt-1.5 text-lg font-semibold text-ink">{milestone.heading}</h2>
+      <ul className="mt-4 space-y-2.5">
+        {milestone.items.map((item, i) => (
+          <li key={i} className="flex items-start gap-2.5 text-sm text-muted">
+            <span className="mt-0.5 shrink-0 text-teal-400/60">›</span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </Card>
+  );
+}
+
 const MEDIAN_HOME_BY_STATE: Record<string, number> = {
   CA: 750_000,
   TX: 350_000,
@@ -52,14 +173,18 @@ export function ForecastClient() {
   const [stateCode, setStateCode] = useState("CA");
   const [aiText, setAiText] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
+  const [activeGoalType, setActiveGoalType] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const res = await apiFetch("/profile");
-        if (!res.ok) return;
-        const data = (await res.json()) as {
+        const [profileRes, goalRes] = await Promise.all([
+          apiFetch("/profile"),
+          apiFetch("/goals"),
+        ]);
+        if (!profileRes.ok) return;
+        const data = (await profileRes.json()) as {
           profile: {
             monthly_income: number;
             current_savings: number;
@@ -75,6 +200,10 @@ export function ForecastClient() {
             current_debt?: number | string | null;
           } | null;
         };
+        if (goalRes.ok) {
+          const goalData = (await goalRes.json()) as { goal: { goal_type: string } | null };
+          if (!cancelled && goalData.goal) setActiveGoalType(goalData.goal.goal_type);
+        }
         if (cancelled || !data.profile) return;
         const p = data.profile;
         setMonthlyIncome(Number(p.monthly_income) || 4000);
@@ -570,6 +699,19 @@ export function ForecastClient() {
           </div>
         </details>
       </div>
+
+      {activeGoalType && (
+        <GoalMilestoneCard
+          goalType={activeGoalType}
+          currentSavings={currentSavings}
+          effectiveSave={effectiveSave}
+          totalExpenses={totalExpenses}
+          emergencyTarget={emergencyTarget}
+          emergencyMonths={emergencyMonths}
+          down10={down10}
+          downMonths={downMonths}
+        />
+      )}
 
       <Card>
         <h2 className="text-lg font-semibold text-ink">{t("milestonesTitle")}</h2>

@@ -4,6 +4,7 @@ import { createServiceClient, isSupabaseConfigured } from "@/lib/db";
 import { getClientIp } from "@/lib/client-ip";
 import { rateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { getStepCount } from "@/lib/workflow-templates";
+import { awardXP, updateStreak, awardBadges } from "@/lib/gamification-server";
 
 // ─────────────────────────────────────────────────────────────
 // POST /api/goals/[id]/steps/[stepIndex]
@@ -98,6 +99,20 @@ export async function POST(
   if (updateErr || !updatedGoal) {
     console.error("[api/goals/steps] update goal:", updateErr);
     return NextResponse.json({ error: "Failed to advance goal" }, { status: 500 });
+  }
+
+  // Award XP for the completed step (fire-and-forget errors to not block the response)
+  try {
+    const eventType = goalNowComplete ? "goal_complete" : "step_complete";
+    await awardXP(supabase, session.userId, eventType, `${goal.goal_type}:${stepIndex}`);
+    await updateStreak(supabase, session.userId);
+    await awardBadges(supabase, session.userId, {
+      eventType: goalNowComplete ? "goal_complete" : "step_complete",
+      goalType: goal.goal_type,
+      stepIndex,
+    });
+  } catch (e) {
+    console.error("[api/goals/steps] gamification:", e);
   }
 
   return NextResponse.json({

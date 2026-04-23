@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Link } from "@/navigation";
 import { Card } from "@/components/ui/Card";
@@ -13,6 +13,69 @@ import {
   getPrevStep,
   type UserProfile,
 } from "@/lib/workflow-templates";
+import { getLessonsForStep } from "@/lib/lessons";
+import { Quiz } from "@/components/quiz";
+import { apiFetch } from "@/lib/api";
+
+// ── Inline Lesson Panel ───────────────────────────────────────
+import type { Lesson } from "@/lib/lessons";
+
+type LessonPanelProps = {
+  lesson: Lesson;
+  onComplete: (passed: boolean, xpGained: number) => void;
+};
+
+function LessonPanel({ lesson, onComplete }: LessonPanelProps) {
+  const [screen, setScreen] = useState(0);
+  const [showQuiz, setShowQuiz] = useState(false);
+  const totalScreens = lesson.screens.length;
+  const isLastScreen = screen === totalScreens - 1;
+
+  if (showQuiz) {
+    return (
+      <Quiz
+        lessonSlug={lesson.slug}
+        questions={lesson.quiz}
+        onComplete={onComplete}
+      />
+    );
+  }
+
+  return (
+    <div className="rounded-xl border border-amber-500/20 bg-amber-950/10 p-4 space-y-3">
+      <div className="flex items-center justify-between">
+        <p className="text-xs font-medium uppercase tracking-wider text-amber-400/70">Lesson</p>
+        <span className="text-xs text-zinc-500">{screen + 1}/{totalScreens}</span>
+      </div>
+      <p className="text-xs font-semibold text-amber-300">{lesson.title}</p>
+      <p className="text-sm leading-relaxed text-zinc-300">{lesson.screens[screen]}</p>
+      <div className="flex gap-1">
+        {lesson.screens.map((_, i) => (
+          <span
+            key={i}
+            className={`h-1 w-5 rounded-full transition-colors ${i <= screen ? "bg-amber-400/60" : "bg-white/10"}`}
+          />
+        ))}
+      </div>
+      <div className="flex gap-2">
+        {screen > 0 && (
+          <button
+            onClick={() => setScreen((s) => s - 1)}
+            className="inline-flex min-h-[32px] items-center justify-center rounded-full border border-white/10 px-3 text-xs text-zinc-400 hover:text-zinc-200 transition-colors"
+          >
+            Back
+          </button>
+        )}
+        <button
+          onClick={() => (isLastScreen ? setShowQuiz(true) : setScreen((s) => s + 1))}
+          className="inline-flex min-h-[32px] items-center justify-center rounded-full border border-amber-500/30 bg-amber-950/30 px-3 text-xs font-medium text-amber-200 hover:bg-amber-950/50 transition-colors"
+        >
+          {isLastScreen ? "Take the quiz →" : "Next →"}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 type UserGoal = {
   id: string;
@@ -36,6 +99,23 @@ export function JourneyCard({ goal, profile }: JourneyCardProps) {
   const [showCelebration, setShowCelebration] = useState(
     goal.status === "completed" || isGoalComplete(goal.goal_type, goal.current_step)
   );
+  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+  const [xpToast, setXpToast] = useState<string | null>(null);
+
+  const stepLessons = getLessonsForStep(goal.goal_type, goal.current_step);
+  const hasLesson = stepLessons.length > 0;
+  const lessonForStep = stepLessons[0];
+  const lessonComplete = !hasLesson || completedLessons.includes(lessonForStep?.slug ?? "");
+
+  // Fetch which lessons the user has already completed for this step
+  useEffect(() => {
+    apiFetch("/gamification")
+      .then((r) => r.json())
+      .then((d: { lessonSlugs?: string[] }) => {
+        if (d.lessonSlugs) setCompletedLessons(d.lessonSlugs);
+      })
+      .catch(() => {});
+  }, [goal.goal_type, goal.current_step]);
 
   const workflow = getWorkflow(goal.goal_type);
   if (!workflow) return null;
@@ -178,14 +258,38 @@ export function JourneyCard({ goal, profile }: JourneyCardProps) {
               ))}
             </div>
           )}
+
+          {/* Inline lesson + quiz */}
+          {hasLesson && lessonForStep && (
+            <div className="mt-4 space-y-3">
+              {!completedLessons.includes(lessonForStep.slug) ? (
+                <LessonPanel
+                  lesson={lessonForStep}
+                  onComplete={(passed, xp) => {
+                    setCompletedLessons((prev) => [...prev, lessonForStep.slug]);
+                    if (xp > 0) {
+                      setXpToast(`+${xp} XP`);
+                      setTimeout(() => setXpToast(null), 3000);
+                    }
+                  }}
+                />
+              ) : (
+                <p className="text-xs text-teal-400/70">Lesson complete — actions unlocked.</p>
+              )}
+            </div>
+          )}
         </div>
       )}
 
       {/* Actions */}
       <div className="mt-4 flex flex-wrap items-center gap-3">
+        {xpToast && (
+          <span className="text-sm font-medium text-teal-400 animate-pulse">{xpToast}</span>
+        )}
         <button
           onClick={handleMarkDone}
-          disabled={isMarking || isPending}
+          disabled={isMarking || isPending || !lessonComplete}
+          title={!lessonComplete ? "Complete the lesson above to unlock this step" : undefined}
           className="inline-flex min-h-[40px] items-center justify-center gap-2 rounded-full border border-teal-500/40 bg-teal-900/40 px-5 text-sm font-semibold text-teal-200 transition-colors hover:bg-teal-900/60 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isMarking ? (
