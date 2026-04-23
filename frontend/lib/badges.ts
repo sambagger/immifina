@@ -14,7 +14,6 @@ export type Badge = {
   id: BadgeId;
   label: string;
   description: string;
-  icon: string;
 };
 
 export const BADGES: Record<BadgeId, Badge> = {
@@ -22,61 +21,51 @@ export const BADGES: Record<BadgeId, Badge> = {
     id: "first_step",
     label: "First Step",
     description: "Complete any workflow step",
-    icon: "✦",
   },
   credit_starter: {
     id: "credit_starter",
     label: "Credit Starter",
     description: "Complete the Build U.S. Credit goal",
-    icon: "✦",
   },
   money_mover: {
     id: "money_mover",
     label: "Money Mover",
     description: "Complete the Remittance goal",
-    icon: "✦",
   },
   paycheck_pro: {
     id: "paycheck_pro",
     label: "Paycheck Pro",
     description: "Pass the paycheck lesson quiz with a perfect score",
-    icon: "✦",
   },
   streak_7: {
     id: "streak_7",
     label: "7-Day Streak",
     description: "Complete an action 7 days in a row",
-    icon: "✦",
   },
   bilingual: {
     id: "bilingual",
     label: "Bilingual",
     description: "Complete a lesson in a non-English language",
-    icon: "✦",
   },
   bank_builder: {
     id: "bank_builder",
     label: "Bank Builder",
     description: "Complete the Open a Bank Account goal",
-    icon: "✦",
   },
   saver: {
     id: "saver",
     label: "Saver",
     description: "Complete the Save Plan goal",
-    icon: "✦",
   },
   tax_ready: {
     id: "tax_ready",
     label: "Tax Ready",
     description: "Complete the Taxes goal",
-    icon: "✦",
   },
   goal_getter: {
     id: "goal_getter",
     label: "Goal Getter",
     description: "Complete any 3 goals",
-    icon: "✦",
   },
 };
 

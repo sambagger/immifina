@@ -171,7 +171,6 @@ export function JourneyCard({ goal, profile }: JourneyCardProps) {
       <Card className="relative overflow-hidden border-teal-500/30 bg-teal-950/20">
         <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-teal-400/60 to-transparent" />
         <div className="flex items-start gap-4">
-          <span className="text-4xl" aria-hidden>🎉</span>
           <div className="flex-1 min-w-0">
             <h2 className="text-lg font-semibold text-teal-300">
               {workflow.label} — Complete!
@@ -201,7 +200,7 @@ export function JourneyCard({ goal, profile }: JourneyCardProps) {
         <div>
           <p className="text-xs font-medium uppercase tracking-wider text-teal-400/70">Your Journey</p>
           <h2 className="mt-0.5 text-lg font-semibold text-white">
-            <span className="mr-2">{workflow.icon}</span>{workflow.label}
+            {workflow.label}
           </h2>
         </div>
         <Link
@@ -295,7 +294,7 @@ export function JourneyCard({ goal, profile }: JourneyCardProps) {
           {isMarking ? (
             <><span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-teal-300/30 border-t-teal-300" />Saving…</>
           ) : (
-            <>✓ Mark as done</>
+            <>Mark as done</>
           )}
         </button>
 
@@ -324,7 +323,7 @@ export function JourneyCard({ goal, profile }: JourneyCardProps) {
             href={`/chat?q=${encodeURIComponent(currentStep.chatPrompt)}`}
             className="inline-flex min-h-[40px] items-center justify-center gap-1.5 rounded-full border border-white/15 bg-white/[0.06] px-5 text-sm font-medium text-zinc-300 transition-colors hover:bg-white/[0.10] hover:text-white"
           >
-            <span aria-hidden>💬</span> Ask ImmiFina about this
+            Ask ImmiFina about this
           </Link>
         )}
       </div>
@@ -337,7 +336,6 @@ export function PickYourPathCard() {
   return (
     <Card className="relative overflow-hidden border-dashed border-white/15">
       <div className="flex items-start gap-4">
-        <span className="text-3xl" aria-hidden>🗺️</span>
         <div className="flex-1">
           <h2 className="text-lg font-semibold text-white">Start Your Financial Journey</h2>
           <p className="mt-1.5 text-sm text-zinc-400">
@@ -345,10 +343,10 @@ export function PickYourPathCard() {
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             {[
-              { label: "📈 Build credit", href: "/goals?start=build_credit" },
-              { label: "🏦 Open a bank account", href: "/goals?start=bank_account" },
-              { label: "💰 Save money", href: "/goals?start=save_plan" },
-              { label: "💸 Send money home", href: "/goals?start=remittance" },
+              { label: "Build credit", href: "/goals?start=build_credit" },
+              { label: "Open a bank account", href: "/goals?start=bank_account" },
+              { label: "Save money", href: "/goals?start=save_plan" },
+              { label: "Send money home", href: "/goals?start=remittance" },
             ].map((g) => (
               <Link
                 key={g.href}

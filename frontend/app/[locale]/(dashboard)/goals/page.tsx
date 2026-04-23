@@ -51,7 +51,6 @@ function GoalGrid() {
 
       {error && (
         <div className="flex items-start gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3">
-          <span className="text-red-400" aria-hidden>✕</span>
           <p className="text-sm text-red-400">{error}</p>
         </div>
       )}
@@ -76,11 +75,6 @@ function GoalGrid() {
                   : "border-white/10 bg-white/[0.04] hover:border-teal-500/40 hover:bg-teal-950/20 cursor-pointer active:scale-[0.98]"
                 }`}
             >
-              {/* Icon */}
-              <span className="text-3xl" aria-hidden>
-                {wf.icon}
-              </span>
-
               {/* Text */}
               <div className="flex-1">
                 <p className="font-semibold text-white group-hover:text-teal-100 transition-colors">

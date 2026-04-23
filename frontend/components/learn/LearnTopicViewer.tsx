@@ -17,7 +17,7 @@ function BankFeeCalculator() {
 
   return (
     <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 space-y-5">
-      <p className="text-sm font-semibold text-zinc-200">💰 Annual fee comparison</p>
+      <p className="text-sm font-semibold text-zinc-200">Annual fee comparison</p>
       <div className="grid gap-4 sm:grid-cols-3">
         <label className="flex flex-col gap-1.5">
           <span className="text-xs text-zinc-500">Bank monthly fee ($)</span>
@@ -97,7 +97,7 @@ function CreditScoreEstimator() {
 
   return (
     <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 space-y-5">
-      <p className="text-sm font-semibold text-zinc-200">📊 Estimate your credit score range</p>
+      <p className="text-sm font-semibold text-zinc-200">Estimate your credit score range</p>
       <div className="space-y-4">
         <div>
           <p className="mb-2 text-xs font-medium text-zinc-400">How many credit accounts do you have?</p>
@@ -180,7 +180,7 @@ function TakeHomeCalculator() {
 
   return (
     <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 space-y-5">
-      <p className="text-sm font-semibold text-zinc-200">🧮 Take-home pay calculator</p>
+      <p className="text-sm font-semibold text-zinc-200">Take-home pay calculator</p>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="flex flex-col gap-1.5">
           <span className="text-xs text-zinc-500">Annual salary ($)</span>
@@ -242,7 +242,7 @@ function RemittanceCalculator() {
 
   return (
     <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 space-y-5">
-      <p className="text-sm font-semibold text-zinc-200">💸 Transfer cost calculator</p>
+      <p className="text-sm font-semibold text-zinc-200">Transfer cost calculator</p>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="flex flex-col gap-1.5">
           <span className="text-xs text-zinc-500">Amount per transfer ($)</span>
@@ -321,7 +321,7 @@ function PaycheckDecoder() {
 
   return (
     <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 space-y-5">
-      <p className="text-sm font-semibold text-zinc-200">📋 Weekly paycheck breakdown</p>
+      <p className="text-sm font-semibold text-zinc-200">Weekly paycheck breakdown</p>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="flex flex-col gap-1.5">
           <span className="text-xs text-zinc-500">Hourly rate ($)</span>
@@ -407,7 +407,7 @@ export function LearnTopicViewer({ topic }: { topic: LearnTopic }) {
                 <span className={`mt-px flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
                   active ? "bg-teal-600 text-white" : done ? "bg-white/15 text-zinc-400" : "bg-white/5 text-zinc-600"
                 }`}>
-                  {done ? "✓" : i + 1}
+                  {i + 1}
                 </span>
                 <span className="line-clamp-2 leading-snug hidden lg:block">{s.title}</span>
               </button>
@@ -458,7 +458,7 @@ export function LearnTopicViewer({ topic }: { topic: LearnTopic }) {
         {/* Warning */}
         {step.warning && (
           <div className="rounded-xl border border-amber-500/20 bg-amber-950/20 p-4 flex gap-3">
-            <span className="text-lg shrink-0">⚠️</span>
+            <div className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
             <p className="text-sm text-amber-200">{step.warning}</p>
           </div>
         )}
@@ -466,7 +466,7 @@ export function LearnTopicViewer({ topic }: { topic: LearnTopic }) {
         {/* Tip */}
         {step.tip && (
           <div className="rounded-xl border border-teal-500/20 bg-teal-950/20 p-4 flex gap-3">
-            <span className="text-lg shrink-0">💡</span>
+            <div className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-400" />
             <p className="text-sm text-teal-200">{step.tip}</p>
           </div>
         )}

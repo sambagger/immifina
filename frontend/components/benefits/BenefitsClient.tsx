@@ -310,10 +310,7 @@ export function BenefitsClient() {
           {earnedIncome && eitcMax != null ? (
             <li>
               <Card className="border-2 border-teal-600/50 bg-teal-500/5 p-6 md:p-8">
-                <p className="text-2xl" aria-hidden>
-                  💰
-                </p>
-                <h3 className="mt-2 text-xl font-semibold text-ink">{t("eitcTitle")}</h3>
+                <h3 className="text-xl font-semibold text-ink">{t("eitcTitle")}</h3>
                 <p className="mt-2 text-sm text-muted">{t("eitcLead")}</p>
                 <p className="mt-3 text-sm font-medium text-ink">{t("eitcWhat")}</p>
                 <p className="mt-1 text-sm text-muted">{t("eitcWhatBody")}</p>

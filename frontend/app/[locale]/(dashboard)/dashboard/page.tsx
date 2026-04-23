@@ -194,7 +194,7 @@ export default async function DashboardPage({
           {immigrationLabel && <span>{immigrationLabel}</span>}
           {immigrationLabel && goalWorkflow && <span className="text-zinc-600" aria-hidden>•</span>}
           {goalWorkflow && (
-            <span>{goalWorkflow.icon} {goalWorkflow.label}</span>
+            <span>{goalWorkflow.label}</span>
           )}
           {activeGoal?.status === "active" && goalWorkflow && (
             <>
@@ -275,7 +275,6 @@ export default async function DashboardPage({
                                        "border-white/10 bg-white/[0.04]"
         }`}>
           <div className="flex items-start gap-3">
-            <span className="text-xl shrink-0" aria-hidden>{nudge.icon}</span>
             <div className="flex-1 min-w-0">
               <p className={`text-sm font-semibold ${
                 nudge.type === "warning"   ? "text-amber-300" :

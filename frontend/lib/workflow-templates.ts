@@ -42,7 +42,6 @@ export type WorkflowStep = {
 export type WorkflowMeta = {
   label: string;
   description: string;
-  icon: string;          // emoji used as icon in the UI
   completionMessage: string;
   steps: WorkflowStep[];
 };
@@ -53,7 +52,6 @@ export const WORKFLOWS: Record<PrimaryGoal, WorkflowMeta> = {
   build_credit: {
     label: "Build U.S. Credit",
     description: "Establish a credit history from scratch — even without a Social Security Number.",
-    icon: "📈",
     completionMessage:
       "You've laid the foundation for your U.S. credit history. Lenders now have a track record to judge you on — not just your background.",
     steps: [
@@ -133,7 +131,6 @@ export const WORKFLOWS: Record<PrimaryGoal, WorkflowMeta> = {
   bank_account: {
     label: "Open a Bank Account",
     description: "Get a safe place to keep your money and stop paying fees for cashing checks.",
-    icon: "🏦",
     completionMessage:
       "You now have a real U.S. bank account. Your money is safe, FDIC-insured, and you can receive direct deposits, pay bills online, and stop paying check-cashing fees.",
     steps: [
@@ -194,7 +191,6 @@ export const WORKFLOWS: Record<PrimaryGoal, WorkflowMeta> = {
   save_plan: {
     label: "Build a Savings Plan",
     description: "Create a savings habit that fits your income and sends money to family back home.",
-    icon: "💰",
     completionMessage:
       "You've built a real savings foundation — an emergency fund, a savings habit, and a plan for the future. Financial security is a process, not a destination, and you've started yours.",
     steps: [
@@ -266,7 +262,6 @@ export const WORKFLOWS: Record<PrimaryGoal, WorkflowMeta> = {
   remittance: {
     label: "Send Money Home Smarter",
     description: "Stop overpaying in fees and poor exchange rates when sending money to your family.",
-    icon: "💸",
     completionMessage:
       "You now have a reliable, low-cost way to support your family back home. Over a year, smarter transfers can save you hundreds of dollars — money that stays in your family's hands.",
     steps: [
@@ -331,7 +326,6 @@ export const WORKFLOWS: Record<PrimaryGoal, WorkflowMeta> = {
   taxes: {
     label: "File My U.S. Taxes",
     description: "Understand your filing obligations and file correctly — even without an SSN.",
-    icon: "🧾",
     completionMessage:
       "You've filed your U.S. taxes correctly. This builds your tax history, which matters for visa renewals, mortgage applications, and DACA renewals. Keep copies of everything you filed.",
     steps: [
@@ -400,7 +394,6 @@ export const WORKFLOWS: Record<PrimaryGoal, WorkflowMeta> = {
   home: {
     label: "Buy a Home",
     description: "Navigate the U.S. home-buying process as an immigrant — it's more possible than you think.",
-    icon: "🏡",
     completionMessage:
       "You've completed your home-buying foundation. You understand the process, have your credit and savings in order, and know your financing options as an immigrant buyer.",
     steps: [
@@ -459,7 +452,6 @@ export const WORKFLOWS: Record<PrimaryGoal, WorkflowMeta> = {
   business: {
     label: "Start a Business",
     description: "Launch a legal business in the U.S. — immigrants start businesses at higher rates than the general population.",
-    icon: "🚀",
     completionMessage:
       "You've built your business foundation — a legal structure, a business bank account, and clarity on your tax obligations. You're running a real business now.",
     steps: [

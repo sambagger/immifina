@@ -15,7 +15,6 @@ import type { UserProfile } from "@/lib/workflow-templates";
 
 export type Nudge = {
   type: "insight" | "action" | "warning" | "milestone";
-  icon: string;
   headline: string;
   body: string;
   cta?: { label: string; href: string };
@@ -59,7 +58,6 @@ export function getNudge(profile: FullProfile, activeGoal: ActiveGoal): Nudge | 
   if (income > 0 && surplus < 0) {
     return {
       type: "warning",
-      icon: "⚠️",
       headline: "Your expenses exceed your income",
       body: `You're spending $${Math.abs(Math.round(surplus)).toLocaleString()} more than you earn each month. Before focusing on ${goalLabel(goalType)}, it may help to review your largest expense categories.`,
       cta: { label: "Update your numbers", href: "/settings" },
@@ -71,7 +69,6 @@ export function getNudge(profile: FullProfile, activeGoal: ActiveGoal): Nudge | 
     if (!hasId) {
       return {
         type: "action",
-        icon: "🪪",
         headline: "Getting an ITIN is your first step",
         body: "To open a secured credit card, most issuers need an SSN or ITIN. An ITIN application takes 7–11 weeks — starting now means you're credit-ready that much sooner.",
         cta: { label: "Read the ITIN guide", href: "/guides/itin" },
@@ -83,7 +80,6 @@ export function getNudge(profile: FullProfile, activeGoal: ActiveGoal): Nudge | 
       if (monthsToDeposit <= 0) {
         return {
           type: "action",
-          icon: "💳",
           headline: "You have enough saved for a secured card deposit",
           body: "Most secured cards require $200–$500 as a deposit. Based on your savings, you can open one now. Look for a card that reports to all three credit bureaus.",
           cta: { label: "How secured cards work", href: "/guides/secured-cards" },
@@ -91,7 +87,6 @@ export function getNudge(profile: FullProfile, activeGoal: ActiveGoal): Nudge | 
       }
       return {
         type: "insight",
-        icon: "📅",
         headline: `Secured card deposit ready in ~${monthsToDeposit} month${monthsToDeposit !== 1 ? "s" : ""}`,
         body: `A $200 secured card deposit at your current savings rate ($${Math.round(canSave).toLocaleString()}/mo) puts you on track for ${monthsToDeposit <= 1 ? "next month" : `${monthsToDeposit} months from now`}.`,
       };
@@ -100,7 +95,6 @@ export function getNudge(profile: FullProfile, activeGoal: ActiveGoal): Nudge | 
     if (step >= 2) {
       return {
         type: "insight",
-        icon: "📊",
         headline: "Payment history is 35% of your credit score",
         body: "The single most important thing you can do right now is pay your card on time, every month. Even one missed payment can set progress back significantly.",
         cta: { label: "Ask ImmiFina about this", href: "/chat?q=How+do+I+set+up+autopay+on+my+secured+card" },
@@ -111,7 +105,6 @@ export function getNudge(profile: FullProfile, activeGoal: ActiveGoal): Nudge | 
   if (goalType === "bank_account") {
     return {
       type: "action",
-      icon: "🏦",
       headline: hasId ? "You can open an account with your ITIN or SSN" : "You can open a bank account without an SSN",
       body: hasId
         ? "Many banks and credit unions accept ITINs to open checking accounts. Call ahead and ask specifically about ITIN accounts before visiting."
@@ -131,7 +124,6 @@ export function getNudge(profile: FullProfile, activeGoal: ActiveGoal): Nudge | 
       if (monthsToEmergency > 0) {
         return {
           type: "action",
-          icon: "🛡️",
           headline: `Emergency fund: ${monthsToEmergency} month${monthsToEmergency !== 1 ? "s" : ""} away`,
           body: `At $${Math.round(canSave).toLocaleString()}/month saved, you'd reach one month of expenses ($${Math.round(emergencyTarget).toLocaleString()}) in ${monthsToEmergency} month${monthsToEmergency !== 1 ? "s" : ""}. Automating this transfer on payday makes it happen without thinking.`,
           cta: { label: "How to automate savings", href: "/chat?q=How+do+I+automate+my+savings" },
@@ -140,7 +132,6 @@ export function getNudge(profile: FullProfile, activeGoal: ActiveGoal): Nudge | 
 
       return {
         type: "milestone",
-        icon: "🎯",
         headline: "Your emergency fund is on track",
         body: `You have $${Math.round(savings).toLocaleString()} saved — that covers ${expenses > 0 ? Math.round((savings / expenses) * 10) / 10 : "?"} month(s) of expenses. Next goal: build toward 3 months.`,
       };
@@ -153,7 +144,6 @@ export function getNudge(profile: FullProfile, activeGoal: ActiveGoal): Nudge | 
       const estimatedSavings = Math.round(annualRemittance * 0.04); // ~4% savings from switching providers
       return {
         type: "insight",
-        icon: "💸",
         headline: `You could save ~$${estimatedSavings}/year on transfers`,
         body: `You're sending about $${remittance.toLocaleString()}/month. Most transfer services charge 3–5% in fees and exchange rate margins. Switching to a lower-cost provider could save around $${estimatedSavings} annually.`,
         cta: { label: "Compare remittance options", href: "/guides/remittance-options" },
@@ -161,7 +151,6 @@ export function getNudge(profile: FullProfile, activeGoal: ActiveGoal): Nudge | 
     }
     return {
       type: "action",
-      icon: "💸",
       headline: "Compare providers before your next transfer",
       body: "Exchange rate margins — not just fees — are where most money is lost. Use remittanceprices.worldbank.org to compare the true cost for your destination country.",
       cta: { label: "How remittances work", href: "/guides/remittance-options" },
@@ -171,7 +160,6 @@ export function getNudge(profile: FullProfile, activeGoal: ActiveGoal): Nudge | 
   if (goalType === "taxes") {
     return {
       type: "action",
-      icon: "🧾",
       headline: "VITA prepares your taxes for free",
       body: "If you earn under $67,000, IRS-certified VITA volunteers file your federal and state return at no cost — and can help you apply for an ITIN at the same time.",
       cta: { label: "Find a VITA site", href: "/guides/vita-free-taxes" },
@@ -182,7 +170,6 @@ export function getNudge(profile: FullProfile, activeGoal: ActiveGoal): Nudge | 
     if (!hasId) {
       return {
         type: "insight",
-        icon: "🏡",
         headline: "ITIN mortgages exist for non-SSN holders",
         body: "Some community banks and credit unions offer mortgages to ITIN holders. Building credit now directly increases the loan terms you'll qualify for later.",
         cta: { label: "Ask ImmiFina", href: "/chat?q=Can+I+get+a+mortgage+with+an+ITIN" },
@@ -190,7 +177,6 @@ export function getNudge(profile: FullProfile, activeGoal: ActiveGoal): Nudge | 
     }
     return {
       type: "insight",
-      icon: "🏡",
       headline: "Credit score is the #1 factor in your mortgage rate",
       body: "A difference of 50 points in credit score can mean a 0.5–1% difference in interest rate — adding up to tens of thousands of dollars over a 30-year loan. Focus on credit first.",
     };
@@ -199,7 +185,6 @@ export function getNudge(profile: FullProfile, activeGoal: ActiveGoal): Nudge | 
   if (goalType === "business") {
     return {
       type: "action",
-      icon: "🚀",
       headline: "You can form an LLC without a U.S. Social Security Number",
       body: "Non-citizens and non-residents can form LLCs in most states. After forming, apply for an EIN from the IRS — you can do this with just an ITIN.",
       cta: { label: "Starting a business guide", href: "/chat?q=Can+I+form+an+LLC+without+an+SSN" },
@@ -212,7 +197,6 @@ export function getNudge(profile: FullProfile, activeGoal: ActiveGoal): Nudge | 
     if (debtToIncome > 3) {
       return {
         type: "warning",
-        icon: "💳",
         headline: "High debt may affect your next steps",
         body: `Your current debt ($${debt.toLocaleString()}) is high relative to your monthly income. Many lenders consider debt-to-income ratio when deciding on loans and credit cards.`,
         cta: { label: "Ask ImmiFina", href: "/chat?q=How+does+debt+affect+my+ability+to+build+credit" },
@@ -223,7 +207,6 @@ export function getNudge(profile: FullProfile, activeGoal: ActiveGoal): Nudge | 
   if (!profile.primary_goal) {
     return {
       type: "action",
-      icon: "🗺️",
       headline: "Pick a goal to get personalized guidance",
       body: "ImmiFina guides you step by step based on your situation. Choose one thing to focus on and we'll map out the path.",
       cta: { label: "Choose your goal", href: "/goals" },

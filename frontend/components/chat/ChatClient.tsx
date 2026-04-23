@@ -320,7 +320,6 @@ export function ChatClient() {
 
             {error ? (
               <div className="flex items-start gap-2 rounded-xl border border-red-500/25 bg-red-500/10 px-3 py-2.5" role="alert">
-                <span className="text-red-400" aria-hidden>✕</span>
                 <p className="text-sm text-red-400">{error}</p>
               </div>
             ) : null}

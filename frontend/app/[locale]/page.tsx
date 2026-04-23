@@ -208,22 +208,21 @@ export default async function HomePage({ params }: { params: { locale: string } 
               </div>
               <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {[
-                  { slug: "itin", icon: "🪪", title: "What Is an ITIN?", desc: "Who needs one, how to apply, and what doors it opens." },
-                  { slug: "secured-cards", icon: "💳", title: "How Secured Credit Cards Work", desc: "Build U.S. credit from scratch — even without an SSN." },
-                  { slug: "building-credit-no-ssn", icon: "📈", title: "Building Credit Without an SSN", desc: "Credit builder loans, authorized users, and ITIN cards." },
-                  { slug: "remittance-options", icon: "💸", title: "Sending Money Home for Less", desc: "How to compare providers and avoid hidden fees." },
-                  { slug: "vita-free-taxes", icon: "🧾", title: "File Your Taxes Free with VITA", desc: "Free IRS-sponsored tax help for immigrants and low-income filers." },
-                  { slug: "w2-explained", icon: "📄", title: "Your W-2 Explained", desc: "Every box on your W-2 in plain language." },
-                  { slug: "itin-banking", icon: "🏦", title: "Opening a Bank Account with an ITIN", desc: "Banks that accept ITIN holders and what you'll need." },
-                  { slug: "public-charge-rule", icon: "⚖️", title: "Public Charge Rule", desc: "Which benefits are safe to use and which aren't." },
-                  { slug: "paycheck-deductions", icon: "💰", title: "Understanding Your Paycheck", desc: "FICA, federal tax, and why your take-home is less than your salary." },
+                  { slug: "itin", title: "What Is an ITIN?", desc: "Who needs one, how to apply, and what doors it opens." },
+                  { slug: "secured-cards", title: "How Secured Credit Cards Work", desc: "Build U.S. credit from scratch — even without an SSN." },
+                  { slug: "building-credit-no-ssn", title: "Building Credit Without an SSN", desc: "Credit builder loans, authorized users, and ITIN cards." },
+                  { slug: "remittance-options", title: "Sending Money Home for Less", desc: "How to compare providers and avoid hidden fees." },
+                  { slug: "vita-free-taxes", title: "File Your Taxes Free with VITA", desc: "Free IRS-sponsored tax help for immigrants and low-income filers." },
+                  { slug: "w2-explained", title: "Your W-2 Explained", desc: "Every box on your W-2 in plain language." },
+                  { slug: "itin-banking", title: "Opening a Bank Account with an ITIN", desc: "Banks that accept ITIN holders and what you'll need." },
+                  { slug: "public-charge-rule", title: "Public Charge Rule", desc: "Which benefits are safe to use and which aren't." },
+                  { slug: "paycheck-deductions", title: "Understanding Your Paycheck", desc: "FICA, federal tax, and why your take-home is less than your salary." },
                 ].map((guide) => (
                   <Link
                     key={guide.slug}
                     href={`/guides/${guide.slug}`}
                     className="group flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-5 transition-all hover:border-teal-500/30 hover:bg-teal-950/20"
                   >
-                    <span className="text-2xl" aria-hidden>{guide.icon}</span>
                     <div>
                       <p className="font-semibold text-white group-hover:text-teal-100 transition-colors">
                         {guide.title}

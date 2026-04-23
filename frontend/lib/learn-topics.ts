@@ -27,7 +27,6 @@ export const LEARN_TOPICS: LearnTopic[] = [
   {
     slug: "banking",
     title: "Opening a Bank Account",
-    icon: "🏦",
     tagline: "How to get your first U.S. bank account — even without an SSN.",
     color: "blue",
     steps: [
@@ -97,7 +96,6 @@ export const LEARN_TOPICS: LearnTopic[] = [
   {
     slug: "credit",
     title: "Building Credit",
-    icon: "💳",
     tagline: "How credit scores work and how to build yours from zero.",
     color: "teal",
     steps: [
@@ -166,7 +164,6 @@ export const LEARN_TOPICS: LearnTopic[] = [
   {
     slug: "taxes",
     title: "Filing Your Taxes",
-    icon: "🧾",
     tagline: "Who has to file, what forms you'll get, and how to do it free.",
     color: "amber",
     steps: [
@@ -234,7 +231,6 @@ export const LEARN_TOPICS: LearnTopic[] = [
   {
     slug: "remittance",
     title: "Sending Money Home",
-    icon: "💸",
     tagline: "How to compare services and keep more of your money.",
     color: "purple",
     steps: [
@@ -292,7 +288,6 @@ export const LEARN_TOPICS: LearnTopic[] = [
   {
     slug: "paycheck",
     title: "Understanding Your Paycheck",
-    icon: "📄",
     tagline: "Why your take-home is less than your salary — and what every deduction means.",
     color: "green",
     steps: [
@@ -348,7 +343,6 @@ export const LEARN_TOPICS: LearnTopic[] = [
   {
     slug: "benefits",
     title: "Benefits & Public Programs",
-    icon: "🛡️",
     tagline: "Which programs are safe to use and what you need to know.",
     color: "red",
     steps: [
@@ -368,14 +362,14 @@ export const LEARN_TOPICS: LearnTopic[] = [
         title: "Benefits NOT counted under public charge",
         body: "Most benefits immigrants use are NOT counted under the public charge test. The list of counted benefits is much shorter than most people fear.",
         facts: [
-          "✅ SAFE: Medicaid for emergency services only",
-          "✅ SAFE: Children's health insurance (CHIP)",
-          "✅ SAFE: School lunch programs",
-          "✅ SAFE: WIC (nutrition for pregnant women and young children)",
-          "✅ SAFE: SNAP (food stamps) for children under 18",
-          "✅ SAFE: Tax credits (EITC, Child Tax Credit)",
-          "✅ SAFE: COVID-19 vaccines and treatments",
-          "✅ SAFE: Unemployment insurance (if you paid into it)",
+          "SAFE: Medicaid for emergency services only",
+          "SAFE: Children's health insurance (CHIP)",
+          "SAFE: School lunch programs",
+          "SAFE: WIC (nutrition for pregnant women and young children)",
+          "SAFE: SNAP (food stamps) for children under 18",
+          "SAFE: Tax credits (EITC, Child Tax Credit)",
+          "SAFE: COVID-19 vaccines and treatments",
+          "SAFE: Unemployment insurance (if you paid into it)",
         ],
         tip: "Benefits used by your U.S. citizen or green card holder family members are NEVER counted against you.",
       },
@@ -383,11 +377,11 @@ export const LEARN_TOPICS: LearnTopic[] = [
         title: "Benefits that MAY be counted",
         body: "A small set of cash assistance programs ARE considered under the public charge test. However, the standard is 'primarily dependent' — using one benefit temporarily doesn't automatically make you a public charge.",
         facts: [
-          "⚠️ Supplemental Security Income (SSI)",
-          "⚠️ Temporary Assistance for Needy Families (TANF) — cash assistance",
-          "⚠️ Long-term institutional care at government expense",
-          "⚠️ Non-emergency Medicaid (for adults, not children)",
-          "⚠️ Section 8 housing vouchers",
+          "CAUTION: Supplemental Security Income (SSI)",
+          "CAUTION: Temporary Assistance for Needy Families (TANF) — cash assistance",
+          "CAUTION: Long-term institutional care at government expense",
+          "CAUTION: Non-emergency Medicaid (for adults, not children)",
+          "CAUTION: Section 8 housing vouchers",
         ],
         warning: "This list can change with administration policy. Always check the current rules at uscis.gov or with an immigration attorney before making decisions.",
       },

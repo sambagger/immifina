@@ -214,7 +214,6 @@ export function RegisterForm() {
         </div>
         {error ? (
           <div className="flex items-start gap-2 rounded-control border border-red-500/30 bg-red-500/10 px-3 py-2.5" role="alert">
-            <span className="mt-px text-red-400" aria-hidden>✕</span>
             <p className="text-sm font-medium text-red-400">{error}</p>
           </div>
         ) : null}
