@@ -7,7 +7,8 @@ export type EducationalDisclaimerTopic =
   | "benefits"
   | "banking"
   | "remittance"
-  | "legal";
+  | "legal"
+  | "community";
 
 type Props = {
   topic?: EducationalDisclaimerTopic;

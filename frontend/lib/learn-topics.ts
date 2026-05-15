@@ -27,6 +27,7 @@ export const LEARN_TOPICS: LearnTopic[] = [
   {
     slug: "banking",
     title: "Opening a Bank Account",
+    icon: "🏦",
     tagline: "How to get your first U.S. bank account — even without an SSN.",
     color: "blue",
     steps: [
@@ -96,6 +97,7 @@ export const LEARN_TOPICS: LearnTopic[] = [
   {
     slug: "credit",
     title: "Building Credit",
+    icon: "💳",
     tagline: "How credit scores work and how to build yours from zero.",
     color: "teal",
     steps: [
@@ -163,6 +165,7 @@ export const LEARN_TOPICS: LearnTopic[] = [
   // ─── TAXES ───────────────────────────────────────────────────────────────
   {
     slug: "taxes",
+    icon: "📋",
     title: "Filing Your Taxes",
     tagline: "Who has to file, what forms you'll get, and how to do it free.",
     color: "amber",
@@ -231,6 +234,7 @@ export const LEARN_TOPICS: LearnTopic[] = [
   {
     slug: "remittance",
     title: "Sending Money Home",
+    icon: "🌐",
     tagline: "How to compare services and keep more of your money.",
     color: "purple",
     steps: [
@@ -288,6 +292,7 @@ export const LEARN_TOPICS: LearnTopic[] = [
   {
     slug: "paycheck",
     title: "Understanding Your Paycheck",
+    icon: "💵",
     tagline: "Why your take-home is less than your salary — and what every deduction means.",
     color: "green",
     steps: [
@@ -343,6 +348,7 @@ export const LEARN_TOPICS: LearnTopic[] = [
   {
     slug: "benefits",
     title: "Benefits & Public Programs",
+    icon: "🎁",
     tagline: "Which programs are safe to use and what you need to know.",
     color: "red",
     steps: [

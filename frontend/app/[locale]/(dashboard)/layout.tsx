@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
-import { LandingPageBackground } from "@/components/landing/LandingPageBackground";
-import { DashboardShell } from "@/components/dashboard/DashboardShell";
+import { DashboardChrome } from "@/components/dashboard/DashboardChrome";
 import { fetchWithSession } from "@/lib/server-fetch";
 
 export const dynamic = "force-dynamic";
@@ -21,10 +20,5 @@ export default async function DashboardLayout({
     }
   }
 
-  return (
-    <div className="relative min-h-screen">
-      <LandingPageBackground />
-      <DashboardShell>{children}</DashboardShell>
-    </div>
-  );
+  return <DashboardChrome>{children}</DashboardChrome>;
 }

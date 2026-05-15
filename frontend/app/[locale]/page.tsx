@@ -24,82 +24,48 @@ export default async function HomePage({ params }: { params: { locale: string } 
 
       <main className="relative z-10">
         {/* ── Hero ─────────────────────────────────────────────── */}
-        <section className="min-h-screen border-b border-white/[0.06]">
-          <div className={`${shell} pb-16 pt-28 md:pb-20 md:pt-36`}>
-            <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-2 lg:gap-20">
+        <section className="flex min-h-screen items-center border-b border-white/[0.06]">
+          <div className={`${shell} py-20 md:py-28`}>
+            <div className="max-w-3xl">
+              <span
+                className="inline-flex items-center rounded-full border border-teal-500/25 bg-teal-950/50 px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-teal-300"
+                style={{ animation: "fadeUp 400ms cubic-bezier(0.23,1,0.32,1) both" }}
+              >
+                {t("heroTagline")}
+              </span>
 
-              {/* Left — headline + CTA */}
-              <div className="flex flex-col items-start gap-7">
-                <span
-                  className="inline-flex items-center rounded-full border border-teal-500/25 bg-teal-950/50 px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-teal-300"
-                  style={{ animation: "fadeUp 400ms cubic-bezier(0.23,1,0.32,1) both" }}
+              <h1
+                className="font-display mt-6 text-[clamp(3rem,6vw,5rem)] leading-[1.0] tracking-tight text-white"
+                style={{ animation: "fadeUp 400ms 80ms cubic-bezier(0.23,1,0.32,1) both" }}
+              >
+                <span className="block">{t("heroTitleLine1")}</span>
+                <span className="mt-1 block italic text-teal-300">{t("heroTitleLine2Italic")}</span>
+              </h1>
+
+              <p
+                className="mt-6 max-w-xl text-lg leading-relaxed text-zinc-200 md:text-xl"
+                style={{ animation: "fadeUp 400ms 140ms cubic-bezier(0.23,1,0.32,1) both" }}
+              >
+                {t("heroSubtitle")}
+              </p>
+
+              <div
+                className="mt-8 flex flex-wrap items-center gap-3"
+                style={{ animation: "fadeUp 400ms 200ms cubic-bezier(0.23,1,0.32,1) both" }}
+              >
+                <Link
+                  href="/register"
+                  className="inline-flex min-h-[46px] items-center justify-center gap-2 rounded-full bg-teal-600 px-8 text-sm font-semibold text-white transition-[transform,background-color] duration-150 hover:bg-teal-500 active:scale-[0.97]"
                 >
-                  {t("heroTagline")}
-                </span>
-
-                <h1
-                  className="font-display text-[clamp(2.6rem,5vw,4.2rem)] leading-[1.02] tracking-tight text-white"
-                  style={{ animation: "fadeUp 400ms 80ms cubic-bezier(0.23,1,0.32,1) both" }}
+                  {t("ctaPrimary")}
+                  <span aria-hidden>→</span>
+                </Link>
+                <a
+                  href="#how-it-works"
+                  className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-white/15 px-8 text-sm font-medium text-zinc-300 transition-[transform,border-color,color] duration-150 hover:border-white/25 hover:text-white active:scale-[0.97]"
                 >
-                  <span className="block">{t("heroTitleLine1")}</span>
-                  <span className="mt-1 block italic text-teal-300">{t("heroTitleLine2Italic")}</span>
-                </h1>
-
-                <p
-                  className="max-w-md text-base leading-relaxed text-zinc-400 md:text-lg"
-                  style={{ animation: "fadeUp 400ms 140ms cubic-bezier(0.23,1,0.32,1) both" }}
-                >
-                  {t("heroSubtitle")}
-                </p>
-
-                <div
-                  className="flex flex-wrap items-center gap-3"
-                  style={{ animation: "fadeUp 400ms 200ms cubic-bezier(0.23,1,0.32,1) both" }}
-                >
-                  <Link
-                    href="/register"
-                    className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-teal-600 px-7 text-sm font-semibold text-white transition-[transform,background-color] duration-150 hover:bg-teal-500 active:scale-[0.97]"
-                  >
-                    {t("ctaPrimary")}
-                    <span aria-hidden>→</span>
-                  </Link>
-                  <a
-                    href="#how-it-works"
-                    className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-white/15 px-7 text-sm font-medium text-zinc-300 transition-[transform,border-color,color] duration-150 hover:border-white/25 hover:text-white active:scale-[0.97]"
-                  >
-                    {t("ctaSecondary")}
-                  </a>
-                </div>
-              </div>
-
-              {/* Right — stat grid with stagger */}
-              <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                {[
-                  { value: "45M+", label: "immigrants living in the U.S. today", delay: "260ms", boxed: false },
-                  { value: "1 in 3", label: "are unbanked or underbanked", delay: "310ms", boxed: false },
-                  { value: "0", label: "credit score on day one, even with years of history abroad", delay: "360ms", boxed: true, context: "Starting from scratch..." },
-                  { value: "6 mo.", label: "to your first U.S. credit score with the right first card", delay: "410ms", boxed: true, context: "The good news..." },
-                ].map((stat) => (
-                  <div
-                    key={stat.value}
-                    className={`rounded-2xl p-5 sm:p-6 transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 ${
-                      stat.boxed
-                        ? "border border-teal-500/20 bg-teal-950/20"
-                        : "border border-white/[0.07] bg-white/[0.025]"
-                    }`}
-                    style={{ animation: `fadeUp 400ms ${stat.delay} cubic-bezier(0.23,1,0.32,1) both` }}
-                  >
-                    {stat.context && (
-                      <p className="mb-2 text-[11px] font-medium text-zinc-600">{stat.context}</p>
-                    )}
-                    <p className={`font-display text-[2.8rem] font-bold leading-none tracking-tight sm:text-[3.2rem] ${stat.boxed ? "text-white" : "text-teal-300"}`}>
-                      {stat.value}
-                    </p>
-                    <p className={`mt-2.5 text-xs leading-snug sm:text-sm ${stat.boxed ? "text-teal-300/70" : "text-zinc-500"}`}>
-                      {stat.label}
-                    </p>
-                  </div>
-                ))}
+                  {t("ctaSecondary")}
+                </a>
               </div>
             </div>
           </div>
