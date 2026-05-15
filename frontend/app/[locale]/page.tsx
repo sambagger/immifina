@@ -10,7 +10,7 @@ import { LandingHowPanel } from "@/components/landing/LandingHowPanel";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 const shell = "mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8";
-const sectionY = "py-16 md:py-24 lg:py-28";
+const sectionY = "py-20 md:py-32 lg:py-36";
 
 export default async function HomePage({ params }: { params: { locale: string } }) {
   const locale = localeFromParam(params.locale);
@@ -22,9 +22,9 @@ export default async function HomePage({ params }: { params: { locale: string } 
       <LandingPageBackground />
       <LandingNav locale={params.locale} overlay />
 
-      <main className="relative z-10">
+      <main className="relative z-10 overflow-x-hidden">
         {/* ── Hero ─────────────────────────────────────────────── */}
-        <section className="flex min-h-screen items-center border-b border-white/[0.06]">
+        <section className="flex min-h-[100dvh] items-center border-b border-white/[0.06]">
           <div className={`${shell} py-20 md:py-28`}>
             <div className="max-w-3xl">
               <span
@@ -135,25 +135,35 @@ export default async function HomePage({ params }: { params: { locale: string } 
               <h2 className="font-display text-3xl leading-tight text-white md:text-4xl">
                 {t("testimonialsTitle")}
               </h2>
-              <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
-                {[
-                  { quote: t("testimonial1Quote"), name: t("testimonial1Name"), role: t("testimonial1Role") },
-                  { quote: t("testimonial2Quote"), name: t("testimonial2Name"), role: t("testimonial2Role") },
-                  { quote: t("testimonial3Quote"), name: t("testimonial3Name"), role: t("testimonial3Role") },
-                ].map((item, i) => (
-                  <blockquote
-                    key={i}
-                    className={`flex flex-col gap-5 border-l-2 border-teal-500/30 pl-6 ${i === 1 ? "md:mt-10" : ""}`}
-                  >
-                    <p className="text-lg font-light leading-relaxed text-zinc-200">
-                      &ldquo;{item.quote}&rdquo;
-                    </p>
-                    <footer className="mt-auto">
-                      <cite className="not-italic text-sm font-semibold text-white">{item.name}</cite>
-                      <p className="mt-0.5 text-xs text-zinc-600">{item.role}</p>
-                    </footer>
-                  </blockquote>
-                ))}
+              <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-[2fr_1fr]">
+                {/* Featured primary quote */}
+                <blockquote className="flex flex-col gap-6 border-l-2 border-teal-500/40 pl-7">
+                  <p className="text-xl font-light leading-relaxed text-zinc-100 md:text-2xl">
+                    &ldquo;{t("testimonial1Quote")}&rdquo;
+                  </p>
+                  <footer className="mt-auto">
+                    <cite className="not-italic text-sm font-semibold text-white">{t("testimonial1Name")}</cite>
+                    <p className="mt-0.5 text-xs text-zinc-600">{t("testimonial1Role")}</p>
+                  </footer>
+                </blockquote>
+
+                {/* Secondary quotes stacked */}
+                <div className="flex flex-col gap-8">
+                  {[
+                    { quote: t("testimonial2Quote"), name: t("testimonial2Name"), role: t("testimonial2Role") },
+                    { quote: t("testimonial3Quote"), name: t("testimonial3Name"), role: t("testimonial3Role") },
+                  ].map((item, i) => (
+                    <blockquote key={i} className="flex flex-col gap-4 border-l-2 border-teal-500/20 pl-5">
+                      <p className="text-sm font-light leading-relaxed text-zinc-400">
+                        &ldquo;{item.quote}&rdquo;
+                      </p>
+                      <footer>
+                        <cite className="not-italic text-sm font-semibold text-white">{item.name}</cite>
+                        <p className="mt-0.5 text-xs text-zinc-600">{item.role}</p>
+                      </footer>
+                    </blockquote>
+                  ))}
+                </div>
               </div>
             </div>
           </section>
@@ -183,7 +193,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
         <ScrollReveal>
           <section id="feedback" className={`scroll-mt-28 ${sectionY}`}>
             <div className={shell}>
-              <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] px-8 py-14 text-center md:px-14 md:py-20">
+              <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] px-8 py-14 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] md:px-14 md:py-20">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500">
                   {t("ctaOverline")}
                 </p>
