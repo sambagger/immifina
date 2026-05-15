@@ -7,7 +7,10 @@ import { LandingNav } from "@/components/landing/LandingNav";
 import { WaitlistForm } from "@/components/landing/WaitlistForm";
 import { LandingFeaturesBento } from "@/components/landing/LandingFeaturesBento";
 import { LandingHowPanel } from "@/components/landing/LandingHowPanel";
+import { LandingProductMockup } from "@/components/landing/LandingProductMockup";
+import { HeroMockupFloat } from "@/components/landing/HeroMockupFloat";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { TextReveal } from "@/components/ui/TextReveal";
 
 const shell = "mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8";
 const sectionY = "py-20 md:py-32 lg:py-36";
@@ -26,47 +29,57 @@ export default async function HomePage({ params }: { params: { locale: string } 
         {/* ── Hero ─────────────────────────────────────────────── */}
         <section className="flex min-h-[100dvh] items-center border-b border-white/[0.06]">
           <div className={`${shell} py-20 md:py-28`}>
-            <div className="max-w-3xl">
-              <span
-                className="inline-flex items-center rounded-full border border-teal-500/25 bg-teal-950/50 px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-teal-300"
-                style={{ animation: "fadeUp 400ms cubic-bezier(0.23,1,0.32,1) both" }}
-              >
-                {t("heroTagline")}
-              </span>
+            <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-10 xl:gap-16">
 
-              <h1
-                className="font-display mt-6 text-[clamp(3rem,6vw,5rem)] leading-[1.0] tracking-tight text-white"
-                style={{ animation: "fadeUp 400ms 80ms cubic-bezier(0.23,1,0.32,1) both" }}
-              >
-                <span className="block">{t("heroTitleLine1")}</span>
-                <span className="mt-1 block italic text-teal-300">{t("heroTitleLine2Italic")}</span>
-              </h1>
-
-              <p
-                className="mt-6 max-w-xl text-lg leading-relaxed text-zinc-200 md:text-xl"
-                style={{ animation: "fadeUp 400ms 140ms cubic-bezier(0.23,1,0.32,1) both" }}
-              >
-                {t("heroSubtitle")}
-              </p>
-
-              <div
-                className="mt-8 flex flex-wrap items-center gap-3"
-                style={{ animation: "fadeUp 400ms 200ms cubic-bezier(0.23,1,0.32,1) both" }}
-              >
-                <Link
-                  href="/register"
-                  className="inline-flex min-h-[46px] items-center justify-center gap-2 rounded-full bg-teal-600 px-8 text-sm font-semibold text-white transition-[transform,background-color] duration-150 hover:bg-teal-500 active:scale-[0.97]"
+              {/* Left: text */}
+              <div>
+                <span
+                  className="inline-flex items-center rounded-full border border-teal-500/25 bg-teal-950/50 px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-teal-300"
+                  style={{ animation: "fadeUp 400ms cubic-bezier(0.23,1,0.32,1) both" }}
                 >
-                  {t("ctaPrimary")}
-                  <span aria-hidden>→</span>
-                </Link>
-                <a
-                  href="#how-it-works"
-                  className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-white/15 px-8 text-sm font-medium text-zinc-300 transition-[transform,border-color,color] duration-150 hover:border-white/25 hover:text-white active:scale-[0.97]"
+                  {t("heroTagline")}
+                </span>
+
+                <h1
+                  className="font-display mt-6 text-[clamp(2.75rem,5.5vw,4.5rem)] leading-[1.0] tracking-tight text-white"
+                  style={{ animation: "fadeUp 400ms 80ms cubic-bezier(0.23,1,0.32,1) both" }}
                 >
-                  {t("ctaSecondary")}
-                </a>
+                  <span className="block">{t("heroTitleLine1")}</span>
+                  <span className="mt-1 block italic text-teal-300">{t("heroTitleLine2Italic")}</span>
+                </h1>
+
+                <p
+                  className="mt-6 max-w-lg text-lg leading-relaxed text-zinc-200 md:text-xl"
+                  style={{ animation: "fadeUp 400ms 140ms cubic-bezier(0.23,1,0.32,1) both" }}
+                >
+                  {t("heroSubtitle")}
+                </p>
+
+                <div
+                  className="mt-8 flex flex-wrap items-center gap-3"
+                  style={{ animation: "fadeUp 400ms 200ms cubic-bezier(0.23,1,0.32,1) both" }}
+                >
+                  <Link
+                    href="/register"
+                    className="inline-flex min-h-[46px] items-center justify-center gap-2 rounded-full bg-teal-600 px-8 text-sm font-semibold text-white transition-[transform,background-color] duration-150 hover:bg-teal-500 active:scale-[0.97]"
+                  >
+                    {t("ctaPrimary")}
+                    <span aria-hidden>→</span>
+                  </Link>
+                  <a
+                    href="#how-it-works"
+                    className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-white/15 px-8 text-sm font-medium text-zinc-300 transition-[transform,border-color,color] duration-150 hover:border-white/25 hover:text-white active:scale-[0.97]"
+                  >
+                    {t("ctaSecondary")}
+                  </a>
+                </div>
               </div>
+
+              {/* Right: animated product mockup */}
+              <HeroMockupFloat>
+                <LandingProductMockup locale={params.locale} />
+              </HeroMockupFloat>
+
             </div>
           </div>
         </section>
@@ -76,7 +89,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
           <section className={`border-b border-white/[0.06] ${sectionY}`}>
             <div className={`${shell} flex flex-col items-start gap-6`}>
               <h2 className="font-display max-w-3xl text-3xl text-white md:text-4xl">
-                {t("problemTitle")}
+                <TextReveal>{t("problemTitle")}</TextReveal>
               </h2>
               <p className="max-w-2xl text-base leading-relaxed text-zinc-400 md:text-lg">
                 {t("problemBody")}
@@ -90,7 +103,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
           <section id="product-features" className={`scroll-mt-28 border-b border-white/[0.06] ${sectionY}`}>
             <div className={`${shell} flex flex-col gap-8`}>
               <h2 className="font-display text-3xl text-white md:text-4xl">
-                {t("featuresTitle")}
+                <TextReveal>{t("featuresTitle")}</TextReveal>
               </h2>
               <LandingFeaturesBento
                 headingLine1={t("featForecastHeadingLine1")}
@@ -133,7 +146,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
           <section id="testimonials" className={`scroll-mt-28 border-b border-white/[0.06] ${sectionY}`}>
             <div className={shell}>
               <h2 className="font-display text-3xl leading-tight text-white md:text-4xl">
-                {t("testimonialsTitle")}
+                <TextReveal>{t("testimonialsTitle")}</TextReveal>
               </h2>
               <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-[2fr_1fr]">
                 {/* Featured primary quote */}
@@ -173,7 +186,9 @@ export default async function HomePage({ params }: { params: { locale: string } 
         <ScrollReveal>
           <section className={`border-b border-white/[0.06] ${sectionY}`}>
             <div className={`${shell} flex flex-col items-start gap-6`}>
-              <h2 className="font-display max-w-3xl text-3xl text-white md:text-4xl">{t("langTitle")}</h2>
+              <h2 className="font-display max-w-3xl text-3xl text-white md:text-4xl">
+                <TextReveal>{t("langTitle")}</TextReveal>
+              </h2>
               <p className="max-w-xl text-base leading-relaxed text-zinc-400 md:text-lg">{t("langBody")}</p>
               <div className="flex flex-wrap gap-2.5 pt-1">
                 {["English", "Español", "中文（简体）"].map((lang) => (
