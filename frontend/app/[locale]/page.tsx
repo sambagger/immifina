@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/navigation";
 import { localeFromParam } from "@/lib/locale-route";
 import { LegalFooter } from "@/components/LegalFooter";
+import { LandingPageBackground } from "@/components/landing/LandingPageBackground";
 import { LandingNav } from "@/components/landing/LandingNav";
 import { WaitlistForm } from "@/components/landing/WaitlistForm";
 import { LandingFeaturesBento } from "@/components/landing/LandingFeaturesBento";
@@ -10,8 +11,6 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 const shell = "mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8";
 const sectionY = "py-16 md:py-24 lg:py-28";
-const sectionTitleCenter =
-  "font-display max-w-3xl text-3xl text-white md:text-4xl lg:text-[2.75rem]";
 
 export default async function HomePage({ params }: { params: { locale: string } }) {
   const locale = localeFromParam(params.locale);
@@ -19,87 +18,88 @@ export default async function HomePage({ params }: { params: { locale: string } 
   const tc = await getTranslations({ locale, namespace: "common" });
 
   return (
-    <div className="min-h-screen bg-[#0c1510] text-white">
-      <LandingNav locale={params.locale} />
+    <>
+      <LandingPageBackground />
+      <LandingNav locale={params.locale} overlay />
 
-      <main>
+      <main className="relative z-10">
         {/* ── Hero ─────────────────────────────────────────────── */}
-        <section className="border-b border-white/8">
-          <div className={`${shell} py-20 md:py-28 lg:py-32`}>
-            <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-20">
+        <section className="min-h-screen border-b border-white/[0.06]">
+          <div className={`${shell} pb-16 pt-28 md:pb-20 md:pt-36`}>
+            <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-2 lg:gap-20">
 
               {/* Left — headline + CTA */}
-              <div className="flex flex-col items-start gap-6">
-                <span className="inline-flex items-center rounded-full border border-teal-500/30 bg-teal-950/60 px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-teal-300">
+              <div className="flex flex-col items-start gap-7">
+                <span
+                  className="inline-flex items-center rounded-full border border-teal-500/25 bg-teal-950/50 px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-teal-300"
+                  style={{ animation: "fadeUp 400ms cubic-bezier(0.23,1,0.32,1) both" }}
+                >
                   {t("heroTagline")}
                 </span>
-                <h1 className="font-display text-[clamp(2.6rem,5vw,4.2rem)] leading-[1.02] tracking-tight text-white">
+
+                <h1
+                  className="font-display text-[clamp(2.6rem,5vw,4.2rem)] leading-[1.02] tracking-tight text-white"
+                  style={{ animation: "fadeUp 400ms 80ms cubic-bezier(0.23,1,0.32,1) both" }}
+                >
                   <span className="block">{t("heroTitleLine1")}</span>
                   <span className="mt-1 block italic text-teal-300">{t("heroTitleLine2Italic")}</span>
                 </h1>
-                <p className="max-w-md text-base leading-relaxed text-zinc-400 md:text-lg">
+
+                <p
+                  className="max-w-md text-base leading-relaxed text-zinc-400 md:text-lg"
+                  style={{ animation: "fadeUp 400ms 140ms cubic-bezier(0.23,1,0.32,1) both" }}
+                >
                   {t("heroSubtitle")}
                 </p>
-                <div className="flex flex-wrap items-center gap-3 pt-2">
+
+                <div
+                  className="flex flex-wrap items-center gap-3"
+                  style={{ animation: "fadeUp 400ms 200ms cubic-bezier(0.23,1,0.32,1) both" }}
+                >
                   <Link
                     href="/register"
-                    className="inline-flex min-h-[46px] items-center justify-center gap-2 rounded-full bg-teal-600 px-7 text-sm font-semibold text-white transition-colors hover:bg-teal-500 active:bg-teal-700"
+                    className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-teal-600 px-7 text-sm font-semibold text-white transition-[transform,background-color] duration-150 hover:bg-teal-500 active:scale-[0.97]"
                   >
                     {t("ctaPrimary")}
                     <span aria-hidden>→</span>
                   </Link>
                   <a
                     href="#how-it-works"
-                    className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-white/15 px-7 text-sm font-medium text-zinc-300 transition-colors hover:border-white/30 hover:text-white"
+                    className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-white/15 px-7 text-sm font-medium text-zinc-300 transition-[transform,border-color,color] duration-150 hover:border-white/25 hover:text-white active:scale-[0.97]"
                   >
                     {t("ctaSecondary")}
                   </a>
                 </div>
               </div>
 
-              {/* Right — stat grid */}
+              {/* Right — stat grid with stagger */}
               <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                {/* Stat 1 */}
-                <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-5 sm:p-6">
-                  <p className="font-display text-[2.8rem] font-bold leading-none tracking-tight text-teal-300 sm:text-[3.4rem]">
-                    45M+
-                  </p>
-                  <p className="mt-2.5 text-xs leading-snug text-zinc-400 sm:text-sm">
-                    immigrants living in the U.S. today
-                  </p>
-                </div>
-
-                {/* Stat 2 */}
-                <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-5 sm:p-6">
-                  <p className="font-display text-[2.8rem] font-bold leading-none tracking-tight text-teal-300 sm:text-[3.4rem]">
-                    1 in 3
-                  </p>
-                  <p className="mt-2.5 text-xs leading-snug text-zinc-400 sm:text-sm">
-                    are unbanked or underbanked in the U.S.
-                  </p>
-                </div>
-
-                {/* Stat 3 — boxed with context */}
-                <div className="rounded-2xl border border-teal-500/20 bg-teal-950/20 p-5 sm:p-6">
-                  <p className="text-xs font-medium text-zinc-500">Starting from scratch...</p>
-                  <p className="mt-2 font-display text-[2.8rem] font-bold leading-none tracking-tight text-white sm:text-[3.4rem]">
-                    0
-                  </p>
-                  <p className="mt-2.5 text-xs leading-snug text-teal-300/80 sm:text-sm">
-                    credit score on day one, even with years of history abroad
-                  </p>
-                </div>
-
-                {/* Stat 4 — boxed with context */}
-                <div className="rounded-2xl border border-teal-500/20 bg-teal-950/20 p-5 sm:p-6">
-                  <p className="text-xs font-medium text-zinc-500">The good news...</p>
-                  <p className="mt-2 font-display text-[2.8rem] font-bold leading-none tracking-tight text-white sm:text-[3.4rem]">
-                    6 mo.
-                  </p>
-                  <p className="mt-2.5 text-xs leading-snug text-teal-300/80 sm:text-sm">
-                    to your first U.S. credit score with the right first card
-                  </p>
-                </div>
+                {[
+                  { value: "45M+", label: "immigrants living in the U.S. today", delay: "260ms", boxed: false },
+                  { value: "1 in 3", label: "are unbanked or underbanked", delay: "310ms", boxed: false },
+                  { value: "0", label: "credit score on day one, even with years of history abroad", delay: "360ms", boxed: true, context: "Starting from scratch..." },
+                  { value: "6 mo.", label: "to your first U.S. credit score with the right first card", delay: "410ms", boxed: true, context: "The good news..." },
+                ].map((stat) => (
+                  <div
+                    key={stat.value}
+                    className={`rounded-2xl p-5 sm:p-6 transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 ${
+                      stat.boxed
+                        ? "border border-teal-500/20 bg-teal-950/20"
+                        : "border border-white/[0.07] bg-white/[0.025]"
+                    }`}
+                    style={{ animation: `fadeUp 400ms ${stat.delay} cubic-bezier(0.23,1,0.32,1) both` }}
+                  >
+                    {stat.context && (
+                      <p className="mb-2 text-[11px] font-medium text-zinc-600">{stat.context}</p>
+                    )}
+                    <p className={`font-display text-[2.8rem] font-bold leading-none tracking-tight sm:text-[3.2rem] ${stat.boxed ? "text-white" : "text-teal-300"}`}>
+                      {stat.value}
+                    </p>
+                    <p className={`mt-2.5 text-xs leading-snug sm:text-sm ${stat.boxed ? "text-teal-300/70" : "text-zinc-500"}`}>
+                      {stat.label}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -107,9 +107,9 @@ export default async function HomePage({ params }: { params: { locale: string } 
 
         {/* ── Problem ──────────────────────────────────────────── */}
         <ScrollReveal>
-          <section className={`border-b border-white/8 ${sectionY}`}>
+          <section className={`border-b border-white/[0.06] ${sectionY}`}>
             <div className={`${shell} flex flex-col items-start gap-6`}>
-              <h2 className="font-display max-w-3xl text-3xl text-white md:text-4xl lg:text-[2.75rem]">
+              <h2 className="font-display max-w-3xl text-3xl text-white md:text-4xl">
                 {t("problemTitle")}
               </h2>
               <p className="max-w-2xl text-base leading-relaxed text-zinc-400 md:text-lg">
@@ -121,12 +121,9 @@ export default async function HomePage({ params }: { params: { locale: string } 
 
         {/* ── Features ─────────────────────────────────────────── */}
         <ScrollReveal>
-          <section
-            id="product-features"
-            className={`scroll-mt-28 border-b border-white/8 ${sectionY}`}
-          >
+          <section id="product-features" className={`scroll-mt-28 border-b border-white/[0.06] ${sectionY}`}>
             <div className={`${shell} flex flex-col gap-8`}>
-              <h2 className="font-display text-3xl text-white md:text-4xl lg:text-[2.75rem]">
+              <h2 className="font-display text-3xl text-white md:text-4xl">
                 {t("featuresTitle")}
               </h2>
               <LandingFeaturesBento
@@ -149,7 +146,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
 
         {/* ── How it works ─────────────────────────────────────── */}
         <ScrollReveal>
-          <section id="how-it-works" className={`scroll-mt-28 border-b border-white/8 ${sectionY}`}>
+          <section id="how-it-works" className={`scroll-mt-28 border-b border-white/[0.06] ${sectionY}`}>
             <div className={shell}>
               <LandingHowPanel
                 titleLine1={t("howTitleLine1")}
@@ -167,7 +164,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
 
         {/* ── Testimonials ─────────────────────────────────────── */}
         <ScrollReveal>
-          <section id="testimonials" className={`scroll-mt-28 border-b border-white/8 ${sectionY}`}>
+          <section id="testimonials" className={`scroll-mt-28 border-b border-white/[0.06] ${sectionY}`}>
             <div className={shell}>
               <h2 className="font-display text-3xl leading-tight text-white md:text-4xl">
                 {t("testimonialsTitle")}
@@ -180,14 +177,14 @@ export default async function HomePage({ params }: { params: { locale: string } 
                 ].map((item, i) => (
                   <blockquote
                     key={i}
-                    className={`flex flex-col gap-5 border-l-2 border-teal-500/40 pl-6 ${i === 1 ? "md:mt-10" : ""}`}
+                    className={`flex flex-col gap-5 border-l-2 border-teal-500/30 pl-6 ${i === 1 ? "md:mt-10" : ""}`}
                   >
                     <p className="text-lg font-light leading-relaxed text-zinc-200">
                       &ldquo;{item.quote}&rdquo;
                     </p>
                     <footer className="mt-auto">
                       <cite className="not-italic text-sm font-semibold text-white">{item.name}</cite>
-                      <p className="mt-0.5 text-xs text-zinc-500">{item.role}</p>
+                      <p className="mt-0.5 text-xs text-zinc-600">{item.role}</p>
                     </footer>
                   </blockquote>
                 ))}
@@ -198,15 +195,15 @@ export default async function HomePage({ params }: { params: { locale: string } 
 
         {/* ── Languages ────────────────────────────────────────── */}
         <ScrollReveal>
-          <section className={`border-b border-white/8 ${sectionY}`}>
+          <section className={`border-b border-white/[0.06] ${sectionY}`}>
             <div className={`${shell} flex flex-col items-start gap-6`}>
-              <h2 className={sectionTitleCenter}>{t("langTitle")}</h2>
+              <h2 className="font-display max-w-3xl text-3xl text-white md:text-4xl">{t("langTitle")}</h2>
               <p className="max-w-xl text-base leading-relaxed text-zinc-400 md:text-lg">{t("langBody")}</p>
               <div className="flex flex-wrap gap-2.5 pt-1">
                 {["English", "Español", "中文（简体）"].map((lang) => (
                   <span
                     key={lang}
-                    className="rounded-full border border-white/15 bg-white/[0.05] px-5 py-2 text-sm font-medium text-zinc-200"
+                    className="rounded-full border border-white/10 bg-white/[0.04] px-5 py-2 text-sm font-medium text-zinc-300"
                   >
                     {lang}
                   </span>
@@ -220,16 +217,16 @@ export default async function HomePage({ params }: { params: { locale: string } 
         <ScrollReveal>
           <section id="feedback" className={`scroll-mt-28 ${sectionY}`}>
             <div className={shell}>
-              <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-8 py-14 text-center md:px-14 md:py-20">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-400">
+              <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] px-8 py-14 text-center md:px-14 md:py-20">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500">
                   {t("ctaOverline")}
                 </p>
-                <h2 className="font-display mt-5 text-3xl text-white md:text-4xl lg:text-[2.65rem]">
+                <h2 className="font-display mt-5 text-3xl text-white md:text-4xl">
                   <span>{t("ctaBannerTitlePart1")}</span>{" "}
                   <span className="italic text-teal-300">{t("ctaBannerTitleAccent")}</span>
                 </h2>
                 <p className="mx-auto mt-5 max-w-lg text-base text-zinc-400 md:text-lg">{t("ctaBannerBody")}</p>
-                <div className="mt-10 [&_button]:!bg-teal-600 [&_button]:!border-teal-500/40 [&_button]:!text-white [&_button]:hover:!bg-teal-500 [&_input]:border-white/15 [&_input]:bg-white/[0.05] [&_input]:text-white [&_input]:placeholder:text-zinc-500">
+                <div className="mt-10 [&_button]:!bg-teal-600 [&_button]:!border-teal-500/40 [&_button]:!text-white [&_button]:hover:!bg-teal-500 [&_input]:border-white/10 [&_input]:bg-white/[0.04] [&_input]:text-white [&_input]:placeholder:text-zinc-600">
                   <WaitlistForm />
                 </div>
               </div>
@@ -239,38 +236,53 @@ export default async function HomePage({ params }: { params: { locale: string } 
       </main>
 
       {/* ── Footer ───────────────────────────────────────────── */}
-      <footer className="border-t border-white/8 py-12 md:py-16">
-        <div className={shell}>
-          <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-            <div className="flex flex-col gap-2">
-              <p className="font-display text-xl text-white">{t("logo")}</p>
-              <p className="text-sm text-zinc-500">{t("footerProduct")}</p>
+      <ScrollReveal>
+        <footer className="relative z-10 border-t border-white/[0.06] py-12 md:py-16">
+          <div className={shell}>
+            <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+              <div className="flex flex-col gap-2">
+                <p className="font-display text-xl text-white">{t("logo")}</p>
+                <p className="text-sm text-zinc-600">{t("footerProduct")}</p>
+              </div>
+              <div className="flex flex-col gap-3 text-sm">
+                <p className="font-medium text-zinc-400">{t("footerPolicies")}</p>
+                <ul className="flex flex-col gap-2 text-zinc-600">
+                  <li>
+                    <Link href="/terms" className="transition-colors duration-150 hover:text-white">
+                      {tc("termsOfService")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/privacy" className="transition-colors duration-150 hover:text-white">
+                      {tc("privacyPolicy")}
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div className="flex flex-col gap-3 text-sm">
-              <p className="font-medium text-zinc-300">{t("footerPolicies")}</p>
-              <ul className="flex flex-col gap-2 text-zinc-500">
-                <li>
-                  <Link href="/terms" className="transition-colors hover:text-white">
-                    {tc("termsOfService")}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/privacy" className="transition-colors hover:text-white">
-                    {tc("privacyPolicy")}
-                  </Link>
-                </li>
-              </ul>
+            <div className="mt-8 border-t border-white/[0.06] pt-8">
+              <LegalFooter
+                align="left"
+                className="!text-zinc-700 [&_a]:!text-zinc-500 [&_p]:!text-zinc-700 [&_span]:!text-zinc-700"
+              />
+              <p className="mt-4 text-xs text-zinc-700">{tc("copyright")}</p>
             </div>
           </div>
-          <div className="mt-8 border-t border-white/8 pt-8">
-            <LegalFooter
-              align="left"
-              className="!text-zinc-600 [&_a]:!text-zinc-400 [&_p]:!text-zinc-600 [&_span]:!text-zinc-600"
-            />
-            <p className="mt-4 text-xs text-zinc-600">{tc("copyright")}</p>
-          </div>
-        </div>
-      </footer>
-    </div>
+        </footer>
+      </ScrollReveal>
+
+      <style>{`
+        @keyframes fadeUp {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+    </>
   );
 }
