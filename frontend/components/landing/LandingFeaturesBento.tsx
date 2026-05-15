@@ -19,18 +19,18 @@ export function LandingFeaturesBento({
     <div className="rounded-2xl border border-white/15 bg-black/50 p-6 shadow-soft backdrop-blur-xl transition-all duration-300 hover:border-white/30 hover:bg-black/[0.42] hover:shadow-[0_16px_48px_rgba(0,0,0,0.45)] md:p-8">
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-center lg:gap-12">
         <div className="min-w-0">
-          <h3 className="font-display text-2xl leading-tight tracking-tight text-landing-title md:text-3xl lg:text-[2.15rem] whitespace-nowrap">
+          <h3 className="font-display text-2xl leading-tight tracking-tight text-white md:text-3xl lg:text-[2.15rem] whitespace-nowrap">
             <span>{headingLine1}</span> <span className="italic">{headingAccent}</span>
           </h3>
-          <p className="mt-4 max-w-xl text-sm leading-relaxed text-landing-body md:text-base">{lead}</p>
+          <p className="mt-4 max-w-xl text-sm leading-relaxed text-zinc-400 md:text-base">{lead}</p>
           <ul className="mt-8 space-y-4">
             {bullets.map((b) => (
               <li key={b.title} className="animate-slide-up flex gap-3 text-left">
-                <span className="mt-0.5 shrink-0 font-bold leading-none text-landing-title" aria-hidden>
+                <span className="mt-0.5 shrink-0 font-bold leading-none text-white" aria-hidden>
                   •
                 </span>
                 <div className="min-w-0 text-sm leading-snug md:text-[15px]">
-                  <span className="font-semibold text-landing-body">{b.title}</span>
+                  <span className="font-semibold text-zinc-400">{b.title}</span>
                   <span className="text-zinc-200"> — {b.description}</span>
                 </div>
               </li>

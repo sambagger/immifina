@@ -12,7 +12,7 @@ export function LandingHowPanel({
   return (
     <div>
       <div className="max-w-2xl">
-        <h2 className="font-display text-3xl leading-tight text-landing-title md:text-4xl lg:text-[2.75rem]">
+        <h2 className="font-display text-3xl leading-tight text-white md:text-4xl lg:text-[2.75rem]">
           <span>{titleLine1}</span>
           {titleLine2 ? (
             <>
@@ -21,7 +21,7 @@ export function LandingHowPanel({
             </>
           ) : null}
         </h2>
-        <p className="mt-5 text-base leading-relaxed text-landing-body md:text-lg">{lead}</p>
+        <p className="mt-5 text-base leading-relaxed text-zinc-400 md:text-lg">{lead}</p>
       </div>
 
       <div className="mt-14 grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-0">
@@ -44,10 +44,10 @@ export function LandingHowPanel({
             <div className="mt-4 h-px w-8 bg-teal-500/40" aria-hidden />
 
             {/* Content */}
-            <h3 className="font-display mt-5 text-lg font-semibold text-landing-title md:text-xl">
+            <h3 className="font-display mt-5 text-lg font-semibold text-white md:text-xl">
               {step.title}
             </h3>
-            <p className="mt-3 text-sm leading-relaxed text-landing-body md:text-base">{step.body}</p>
+            <p className="mt-3 text-sm leading-relaxed text-zinc-400 md:text-base">{step.body}</p>
           </div>
         ))}
       </div>

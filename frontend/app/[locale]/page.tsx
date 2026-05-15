@@ -2,23 +2,16 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/navigation";
 import { localeFromParam } from "@/lib/locale-route";
 import { LegalFooter } from "@/components/LegalFooter";
-import { LandingPageBackground } from "@/components/landing/LandingPageBackground";
 import { LandingNav } from "@/components/landing/LandingNav";
-import { LandingProductMockup } from "@/components/landing/LandingProductMockup";
 import { WaitlistForm } from "@/components/landing/WaitlistForm";
 import { LandingFeaturesBento } from "@/components/landing/LandingFeaturesBento";
 import { LandingHowPanel } from "@/components/landing/LandingHowPanel";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { LandingInteractiveCard } from "@/components/landing/LandingInteractiveCard";
-import { landingLargeBodyClass } from "@/lib/landing-copy-classes";
 
-/** Centered page width + horizontal padding (all landing sections). */
 const shell = "mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8";
-/** Vertical rhythm between major sections. */
 const sectionY = "py-16 md:py-24 lg:py-28";
-/** Centered section headings (problem, testimonials, languages, etc.). */
 const sectionTitleCenter =
-  "font-display max-w-3xl text-3xl text-landing-title md:text-4xl lg:text-[2.75rem] xl:text-[3rem] 2xl:text-[3.35rem]";
+  "font-display max-w-3xl text-3xl text-white md:text-4xl lg:text-[2.75rem]";
 
 export default async function HomePage({ params }: { params: { locale: string } }) {
   const locale = localeFromParam(params.locale);
@@ -26,69 +19,114 @@ export default async function HomePage({ params }: { params: { locale: string } 
   const tc = await getTranslations({ locale, namespace: "common" });
 
   return (
-    <>
-      <LandingPageBackground />
-      <LandingNav locale={params.locale} overlay />
-      <main className="relative z-10">
-        <ScrollReveal>
-          <section className="relative z-10 min-h-screen">
-            <div className={`${shell} relative z-10 pb-12 pt-28 md:pb-16 md:pt-36`}>
-              <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
-                {/* Copy — left-aligned on desktop, centered on mobile */}
-                <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-                  <span className="animate-slide-up animate-pill-glow stagger-1 inline-flex items-center rounded-full border border-teal-500/30 bg-teal-950/70 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-teal-300">
-                    {t("heroTagline")}
-                  </span>
-                  <h1 className="font-display mt-6 text-[clamp(2.4rem,4.6vw,4rem)] leading-[1.03]">
-                    <span className="animate-slide-up stagger-2 block text-landing-title">{t("heroTitleLine1")}</span>
-                    <span className="animate-slide-up stagger-3 mt-1 block whitespace-nowrap italic text-landing-title md:mt-1">
-                      {t("heroTitleLine2Italic")}
-                    </span>
-                  </h1>
-                  <p className="animate-slide-up stagger-4 mt-6 max-w-lg text-base leading-relaxed text-landing-body md:text-lg">
-                    {t("heroSubtitle")}
-                  </p>
-                  <div className="animate-slide-up stagger-5 mt-9 flex flex-wrap items-center justify-center gap-4 lg:justify-start md:mt-10">
-                    <Link
-                      href="/register"
-                      className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full border border-white/25 bg-[#1d6b4f] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_4px_24px_rgba(0,0,0,0.55),0_2px_8px_rgba(0,0,0,0.45)] transition-[transform,box-shadow] hover:scale-[1.03] hover:shadow-[0_6px_28px_rgba(0,0,0,0.6)] active:scale-[0.98] focus-visible:focus-ring md:px-8"
-                    >
-                      {t("ctaPrimary")}
-                      <span aria-hidden>→</span>
-                    </Link>
-                    <a
-                      href="#how-it-works"
-                      className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-white/35 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white shadow-[0_4px_20px_rgba(0,0,0,0.45)] backdrop-blur-md transition-[background-color,transform] hover:scale-[1.03] hover:bg-white/15 active:scale-[0.98] focus-visible:focus-ring md:px-8"
-                    >
-                      {t("ctaSecondary")}
-                    </a>
-                  </div>
+    <div className="min-h-screen bg-[#0c1510] text-white">
+      <LandingNav locale={params.locale} />
+
+      <main>
+        {/* ── Hero ─────────────────────────────────────────────── */}
+        <section className="border-b border-white/8">
+          <div className={`${shell} py-20 md:py-28 lg:py-32`}>
+            <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-20">
+
+              {/* Left — headline + CTA */}
+              <div className="flex flex-col items-start gap-6">
+                <span className="inline-flex items-center rounded-full border border-teal-500/30 bg-teal-950/60 px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-teal-300">
+                  {t("heroTagline")}
+                </span>
+                <h1 className="font-display text-[clamp(2.6rem,5vw,4.2rem)] leading-[1.02] tracking-tight text-white">
+                  <span className="block">{t("heroTitleLine1")}</span>
+                  <span className="mt-1 block italic text-teal-300">{t("heroTitleLine2Italic")}</span>
+                </h1>
+                <p className="max-w-md text-base leading-relaxed text-zinc-400 md:text-lg">
+                  {t("heroSubtitle")}
+                </p>
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <Link
+                    href="/register"
+                    className="inline-flex min-h-[46px] items-center justify-center gap-2 rounded-full bg-teal-600 px-7 text-sm font-semibold text-white transition-colors hover:bg-teal-500 active:bg-teal-700"
+                  >
+                    {t("ctaPrimary")}
+                    <span aria-hidden>→</span>
+                  </Link>
+                  <a
+                    href="#how-it-works"
+                    className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-white/15 px-7 text-sm font-medium text-zinc-300 transition-colors hover:border-white/30 hover:text-white"
+                  >
+                    {t("ctaSecondary")}
+                  </a>
                 </div>
-                {/* Mockup — right column, floats gently */}
-                <LandingInteractiveCard className="animate-slide-up animate-float stagger-3 w-full">
-                  <LandingProductMockup locale={params.locale} />
-                </LandingInteractiveCard>
+              </div>
+
+              {/* Right — stat grid */}
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                {/* Stat 1 */}
+                <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-5 sm:p-6">
+                  <p className="font-display text-[2.8rem] font-bold leading-none tracking-tight text-teal-300 sm:text-[3.4rem]">
+                    45M+
+                  </p>
+                  <p className="mt-2.5 text-xs leading-snug text-zinc-400 sm:text-sm">
+                    immigrants living in the U.S. today
+                  </p>
+                </div>
+
+                {/* Stat 2 */}
+                <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-5 sm:p-6">
+                  <p className="font-display text-[2.8rem] font-bold leading-none tracking-tight text-teal-300 sm:text-[3.4rem]">
+                    1 in 3
+                  </p>
+                  <p className="mt-2.5 text-xs leading-snug text-zinc-400 sm:text-sm">
+                    are unbanked or underbanked in the U.S.
+                  </p>
+                </div>
+
+                {/* Stat 3 — boxed with context */}
+                <div className="rounded-2xl border border-teal-500/20 bg-teal-950/20 p-5 sm:p-6">
+                  <p className="text-xs font-medium text-zinc-500">Starting from scratch...</p>
+                  <p className="mt-2 font-display text-[2.8rem] font-bold leading-none tracking-tight text-white sm:text-[3.4rem]">
+                    0
+                  </p>
+                  <p className="mt-2.5 text-xs leading-snug text-teal-300/80 sm:text-sm">
+                    credit score on day one, even with years of history abroad
+                  </p>
+                </div>
+
+                {/* Stat 4 — boxed with context */}
+                <div className="rounded-2xl border border-teal-500/20 bg-teal-950/20 p-5 sm:p-6">
+                  <p className="text-xs font-medium text-zinc-500">The good news...</p>
+                  <p className="mt-2 font-display text-[2.8rem] font-bold leading-none tracking-tight text-white sm:text-[3.4rem]">
+                    6 mo.
+                  </p>
+                  <p className="mt-2.5 text-xs leading-snug text-teal-300/80 sm:text-sm">
+                    to your first U.S. credit score with the right first card
+                  </p>
+                </div>
               </div>
             </div>
-          </section>
-        </ScrollReveal>
+          </div>
+        </section>
 
+        {/* ── Problem ──────────────────────────────────────────── */}
         <ScrollReveal>
-          <section className={`border-t border-white/10 ${sectionY}`}>
-            <div className={`${shell} flex flex-col items-center gap-6 text-center md:gap-8`}>
-              <h2 className={sectionTitleCenter}>{t("problemTitle")}</h2>
-              <p className={landingLargeBodyClass}>{t("problemBody")}</p>
+          <section className={`border-b border-white/8 ${sectionY}`}>
+            <div className={`${shell} flex flex-col items-start gap-6`}>
+              <h2 className="font-display max-w-3xl text-3xl text-white md:text-4xl lg:text-[2.75rem]">
+                {t("problemTitle")}
+              </h2>
+              <p className="max-w-2xl text-base leading-relaxed text-zinc-400 md:text-lg">
+                {t("problemBody")}
+              </p>
             </div>
           </section>
         </ScrollReveal>
 
+        {/* ── Features ─────────────────────────────────────────── */}
         <ScrollReveal>
           <section
             id="product-features"
-            className={`scroll-mt-28 border-t border-white/10 ${sectionY}`}
+            className={`scroll-mt-28 border-b border-white/8 ${sectionY}`}
           >
-            <div className={`${shell} flex flex-col gap-6 md:gap-8`}>
-              <h2 className="font-display text-3xl text-landing-title md:text-4xl lg:text-[2.75rem]">
+            <div className={`${shell} flex flex-col gap-8`}>
+              <h2 className="font-display text-3xl text-white md:text-4xl lg:text-[2.75rem]">
                 {t("featuresTitle")}
               </h2>
               <LandingFeaturesBento
@@ -109,8 +147,9 @@ export default async function HomePage({ params }: { params: { locale: string } 
           </section>
         </ScrollReveal>
 
+        {/* ── How it works ─────────────────────────────────────── */}
         <ScrollReveal>
-          <section id="how-it-works" className={`scroll-mt-28 border-t border-white/10 ${sectionY}`}>
+          <section id="how-it-works" className={`scroll-mt-28 border-b border-white/8 ${sectionY}`}>
             <div className={shell}>
               <LandingHowPanel
                 titleLine1={t("howTitleLine1")}
@@ -126,132 +165,71 @@ export default async function HomePage({ params }: { params: { locale: string } 
           </section>
         </ScrollReveal>
 
+        {/* ── Testimonials ─────────────────────────────────────── */}
         <ScrollReveal>
-          <section id="testimonials" className={`scroll-mt-28 border-t border-white/10 ${sectionY}`}>
+          <section id="testimonials" className={`scroll-mt-28 border-b border-white/8 ${sectionY}`}>
             <div className={shell}>
-              <h2 className="font-display text-3xl leading-tight text-landing-title md:text-4xl lg:text-[2.75rem]">
+              <h2 className="font-display text-3xl leading-tight text-white md:text-4xl">
                 {t("testimonialsTitle")}
               </h2>
-              <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-8">
-                <blockquote className="flex flex-col gap-5 border-l-2 border-teal-500/50 pl-6">
-                  <p className="text-xl font-light leading-relaxed text-landing-title">
-                    &ldquo;{t("testimonial1Quote")}&rdquo;
-                  </p>
-                  <footer className="mt-auto">
-                    <cite className="font-display not-italic text-sm font-semibold text-landing-title">
-                      {t("testimonial1Name")}
-                    </cite>
-                    <p className="mt-0.5 text-xs text-zinc-400">{t("testimonial1Role")}</p>
-                  </footer>
-                </blockquote>
-                <blockquote className="flex flex-col gap-5 border-l-2 border-teal-500/50 pl-6 md:mt-10">
-                  <p className="text-xl font-light leading-relaxed text-landing-title">
-                    &ldquo;{t("testimonial2Quote")}&rdquo;
-                  </p>
-                  <footer className="mt-auto">
-                    <cite className="font-display not-italic text-sm font-semibold text-landing-title">
-                      {t("testimonial2Name")}
-                    </cite>
-                    <p className="mt-0.5 text-xs text-zinc-400">{t("testimonial2Role")}</p>
-                  </footer>
-                </blockquote>
-                <blockquote className="flex flex-col gap-5 border-l-2 border-teal-500/50 pl-6">
-                  <p className="text-xl font-light leading-relaxed text-landing-title">
-                    &ldquo;{t("testimonial3Quote")}&rdquo;
-                  </p>
-                  <footer className="mt-auto">
-                    <cite className="font-display not-italic text-sm font-semibold text-landing-title">
-                      {t("testimonial3Name")}
-                    </cite>
-                    <p className="mt-0.5 text-xs text-zinc-400">{t("testimonial3Role")}</p>
-                  </footer>
-                </blockquote>
-              </div>
-            </div>
-          </section>
-        </ScrollReveal>
-
-        <ScrollReveal>
-          <section className={`border-t border-white/10 ${sectionY}`}>
-            <div className={`${shell} flex flex-col items-center gap-6 text-center md:gap-8`}>
-              <h2 className={sectionTitleCenter}>{t("langTitle")}</h2>
-              <p className="max-w-xl text-lg leading-relaxed text-landing-body">{t("langBody")}</p>
-              <div className="flex flex-wrap justify-center gap-3 pt-2">
-                <span className="rounded-full border border-white/25 bg-black/50 px-5 py-2.5 text-sm font-medium text-white shadow-soft backdrop-blur-md">
-                  English
-                </span>
-                <span className="rounded-full border border-white/25 bg-black/50 px-5 py-2.5 text-sm font-medium text-white shadow-soft backdrop-blur-md">
-                  Español
-                </span>
-                <span className="rounded-full border border-white/25 bg-black/50 px-5 py-2.5 text-sm font-medium text-white shadow-soft backdrop-blur-md">
-                  中文（简体）
-                </span>
-              </div>
-            </div>
-          </section>
-        </ScrollReveal>
-
-        {/* ── Guides section ──────────────────────────────── */}
-        <ScrollReveal>
-          <section id="guides" className={`scroll-mt-28 border-t border-white/10 ${sectionY}`}>
-            <div className={shell}>
-              <div className="flex flex-col items-center text-center gap-4">
-                <span className="inline-flex items-center rounded-full border border-teal-500/30 bg-teal-950/70 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-teal-300">
-                  Free Guides
-                </span>
-                <h2 className={sectionTitleCenter}>
-                  Everything you need to know about money in the U.S.
-                </h2>
-                <p className="max-w-xl text-lg leading-relaxed text-landing-body">
-                  Plain-language explanations of the U.S. financial system — no jargon, no assumptions. Read before you sign up.
-                </p>
-              </div>
-              <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
                 {[
-                  { slug: "itin", title: "What Is an ITIN?", desc: "Who needs one, how to apply, and what doors it opens." },
-                  { slug: "secured-cards", title: "How Secured Credit Cards Work", desc: "Build U.S. credit from scratch — even without an SSN." },
-                  { slug: "building-credit-no-ssn", title: "Building Credit Without an SSN", desc: "Credit builder loans, authorized users, and ITIN cards." },
-                  { slug: "remittance-options", title: "Sending Money Home for Less", desc: "How to compare providers and avoid hidden fees." },
-                  { slug: "vita-free-taxes", title: "File Your Taxes Free with VITA", desc: "Free IRS-sponsored tax help for immigrants and low-income filers." },
-                  { slug: "w2-explained", title: "Your W-2 Explained", desc: "Every box on your W-2 in plain language." },
-                  { slug: "itin-banking", title: "Opening a Bank Account with an ITIN", desc: "Banks that accept ITIN holders and what you'll need." },
-                  { slug: "public-charge-rule", title: "Public Charge Rule", desc: "Which benefits are safe to use and which aren't." },
-                  { slug: "paycheck-deductions", title: "Understanding Your Paycheck", desc: "FICA, federal tax, and why your take-home is less than your salary." },
-                ].map((guide) => (
-                  <Link
-                    key={guide.slug}
-                    href={`/guides/${guide.slug}`}
-                    className="group flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-5 transition-all hover:border-teal-500/30 hover:bg-teal-950/20"
+                  { quote: t("testimonial1Quote"), name: t("testimonial1Name"), role: t("testimonial1Role") },
+                  { quote: t("testimonial2Quote"), name: t("testimonial2Name"), role: t("testimonial2Role") },
+                  { quote: t("testimonial3Quote"), name: t("testimonial3Name"), role: t("testimonial3Role") },
+                ].map((item, i) => (
+                  <blockquote
+                    key={i}
+                    className={`flex flex-col gap-5 border-l-2 border-teal-500/40 pl-6 ${i === 1 ? "md:mt-10" : ""}`}
                   >
-                    <div>
-                      <p className="font-semibold text-white group-hover:text-teal-100 transition-colors">
-                        {guide.title}
-                      </p>
-                      <p className="mt-1 text-sm leading-snug text-zinc-400">{guide.desc}</p>
-                    </div>
-                    <span className="mt-auto text-xs text-teal-500/70 group-hover:text-teal-400 transition-colors">
-                      Read guide →
-                    </span>
-                  </Link>
+                    <p className="text-lg font-light leading-relaxed text-zinc-200">
+                      &ldquo;{item.quote}&rdquo;
+                    </p>
+                    <footer className="mt-auto">
+                      <cite className="not-italic text-sm font-semibold text-white">{item.name}</cite>
+                      <p className="mt-0.5 text-xs text-zinc-500">{item.role}</p>
+                    </footer>
+                  </blockquote>
                 ))}
               </div>
             </div>
           </section>
         </ScrollReveal>
 
+        {/* ── Languages ────────────────────────────────────────── */}
         <ScrollReveal>
-          <section id="feedback" className={`scroll-mt-28 border-t border-white/10 ${sectionY}`}>
+          <section className={`border-b border-white/8 ${sectionY}`}>
+            <div className={`${shell} flex flex-col items-start gap-6`}>
+              <h2 className={sectionTitleCenter}>{t("langTitle")}</h2>
+              <p className="max-w-xl text-base leading-relaxed text-zinc-400 md:text-lg">{t("langBody")}</p>
+              <div className="flex flex-wrap gap-2.5 pt-1">
+                {["English", "Español", "中文（简体）"].map((lang) => (
+                  <span
+                    key={lang}
+                    className="rounded-full border border-white/15 bg-white/[0.05] px-5 py-2 text-sm font-medium text-zinc-200"
+                  >
+                    {lang}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </section>
+        </ScrollReveal>
+
+        {/* ── Final CTA ────────────────────────────────────────── */}
+        <ScrollReveal>
+          <section id="feedback" className={`scroll-mt-28 ${sectionY}`}>
             <div className={shell}>
-              <div className="overflow-hidden rounded-[28px] border border-white/15 bg-black/50 px-6 py-12 text-center shadow-soft backdrop-blur-xl md:px-12 md:py-16">
-                <p className="font-sans text-xs font-semibold uppercase tracking-[0.22em] text-zinc-200 md:text-sm">
+              <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-8 py-14 text-center md:px-14 md:py-20">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-400">
                   {t("ctaOverline")}
                 </p>
-                <h2 className="font-display mt-4 text-3xl text-landing-title md:mt-6 md:text-4xl lg:text-[2.65rem]">
+                <h2 className="font-display mt-5 text-3xl text-white md:text-4xl lg:text-[2.65rem]">
                   <span>{t("ctaBannerTitlePart1")}</span>{" "}
-                  <span className="italic text-landing-title">{t("ctaBannerTitleAccent")}</span>
+                  <span className="italic text-teal-300">{t("ctaBannerTitleAccent")}</span>
                 </h2>
-                <p className="mx-auto mt-5 max-w-lg text-lg text-landing-body md:mt-6">{t("ctaBannerBody")}</p>
-                <div className="mt-10 [&_button]:border-accent [&_button]:!bg-[#1d6b4f] [&_button]:!text-white [&_button]:hover:!bg-[#185a42] [&_input]:border-white/20 [&_input]:bg-black/40 [&_input]:text-white [&_input]:placeholder:text-zinc-400">
+                <p className="mx-auto mt-5 max-w-lg text-base text-zinc-400 md:text-lg">{t("ctaBannerBody")}</p>
+                <div className="mt-10 [&_button]:!bg-teal-600 [&_button]:!border-teal-500/40 [&_button]:!text-white [&_button]:hover:!bg-teal-500 [&_input]:border-white/15 [&_input]:bg-white/[0.05] [&_input]:text-white [&_input]:placeholder:text-zinc-500">
                   <WaitlistForm />
                 </div>
               </div>
@@ -260,46 +238,39 @@ export default async function HomePage({ params }: { params: { locale: string } 
         </ScrollReveal>
       </main>
 
-      <ScrollReveal>
-        <footer className="relative z-10 border-t border-white/10 py-12 md:py-16">
-          <div className={shell}>
-            <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-              <div className="flex flex-col gap-2">
-                <p className="font-display text-xl text-landing-title">{t("logo")}</p>
-                <p className="text-sm text-landing-body">{t("footerProduct")}</p>
-              </div>
-              <div className="flex flex-col gap-3 text-sm">
-                <p className="font-medium text-landing-title">{t("footerPolicies")}</p>
-                <ul className="flex flex-col gap-2 text-landing-body">
-                  <li>
-                    <Link
-                      href="/terms"
-                      className="rounded-sm text-landing-body transition-colors hover:text-white focus-visible:focus-ring"
-                    >
-                      {tc("termsOfService")}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/privacy"
-                      className="rounded-sm text-landing-body transition-colors hover:text-white focus-visible:focus-ring"
-                    >
-                      {tc("privacyPolicy")}
-                    </Link>
-                  </li>
-                </ul>
-              </div>
+      {/* ── Footer ───────────────────────────────────────────── */}
+      <footer className="border-t border-white/8 py-12 md:py-16">
+        <div className={shell}>
+          <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+            <div className="flex flex-col gap-2">
+              <p className="font-display text-xl text-white">{t("logo")}</p>
+              <p className="text-sm text-zinc-500">{t("footerProduct")}</p>
             </div>
-            <div className="mt-8 border-t border-white/15 pt-8">
-              <LegalFooter
-                align="left"
-                className="!text-landing-body [&_a]:!text-white [&_p]:!text-landing-body [&_span]:!text-landing-body"
-              />
-              <p className="mt-4 text-xs text-zinc-200">{tc("copyright")}</p>
+            <div className="flex flex-col gap-3 text-sm">
+              <p className="font-medium text-zinc-300">{t("footerPolicies")}</p>
+              <ul className="flex flex-col gap-2 text-zinc-500">
+                <li>
+                  <Link href="/terms" className="transition-colors hover:text-white">
+                    {tc("termsOfService")}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/privacy" className="transition-colors hover:text-white">
+                    {tc("privacyPolicy")}
+                  </Link>
+                </li>
+              </ul>
             </div>
           </div>
-        </footer>
-      </ScrollReveal>
-    </>
+          <div className="mt-8 border-t border-white/8 pt-8">
+            <LegalFooter
+              align="left"
+              className="!text-zinc-600 [&_a]:!text-zinc-400 [&_p]:!text-zinc-600 [&_span]:!text-zinc-600"
+            />
+            <p className="mt-4 text-xs text-zinc-600">{tc("copyright")}</p>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }
