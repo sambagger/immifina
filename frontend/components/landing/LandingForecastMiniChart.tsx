@@ -40,15 +40,15 @@ export function LandingForecastMiniChart({ className = "" }: { className?: strin
           data={data}
           margin={{ top: 8, right: 8, left: 4, bottom: 4 }}
         >
-          <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
+          <CartesianGrid stroke="rgba(0,0,0,0.06)" vertical={false} />
           <XAxis
             dataKey="year"
-            tick={{ fill: "#d4d4d8", fontSize: 10 }}
+            tick={{ fill: "#9ca3af", fontSize: 10 }}
             tickLine={false}
-            axisLine={{ stroke: "rgba(255,255,255,0.12)" }}
+            axisLine={{ stroke: "rgba(0,0,0,0.08)" }}
           />
           <YAxis
-            tick={{ fill: "#d4d4d8", fontSize: 10, dx: -1 }}
+            tick={{ fill: "#9ca3af", fontSize: 10, dx: -1 }}
             tickFormatter={(v) => `$${Math.round(v / 1000)}k`}
             width={52}
             tickLine={false}
@@ -58,15 +58,16 @@ export function LandingForecastMiniChart({ className = "" }: { className?: strin
             formatter={(value) => [`$${Number(value).toLocaleString()}`, ""]}
             contentStyle={{
               borderRadius: 8,
-              border: "1px solid rgba(255,255,255,0.12)",
-              background: "rgba(0,0,0,0.85)",
+              border: "1px solid rgba(0,0,0,0.08)",
+              background: "rgba(255,255,255,0.95)",
               fontSize: 12,
+              color: "#111827",
             }}
-            labelStyle={{ color: "#e4e4e7" }}
+            labelStyle={{ color: "#374151" }}
           />
           <Legend
             wrapperStyle={{ fontSize: 11, paddingTop: 4 }}
-            formatter={(value) => <span className="text-zinc-200">{value}</span>}
+            formatter={(value) => <span style={{ color: "#6b7280" }}>{value}</span>}
           />
           <Line
             type="monotone"
